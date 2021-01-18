@@ -1,24 +1,3 @@
-# my-vue-app
+# security-incident-classifier-web-system
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+A Security Incident Classifier Web System for eventual use by IT services here at the university, of a similar ilk to the Common Vulnerability Scoring System (CVSS - https://www.first.org/cvss/calculator/3.1), with more emphasis on University assets.
