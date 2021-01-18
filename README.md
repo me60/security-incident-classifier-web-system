@@ -4,7 +4,7 @@ A Dynamic Security Incident Classifier Web System for eventual use by IT service
 
 The system is designed in such a way that it can accommodate any combination of questions and answers, and how a specific answer chosen affects an end-severity for which there may be many. The motivation as well as increased reasoning of the following model can be found in the documentation. Questions have an off-screen mapping to Effects, which relate to final Severities displayed to the user at the bottom of the current form. Logic that governs the specific way in which Effects alter severities is controlled via how Effects are intermediately mapped to Severities, as such, they are referred to as Intermediates:
 
-![](./src/assets/abstract_dynamic_severity_classification_diagram.PNG) 
+![](./src/assets/abstract_dynamic_severity_classification_system_diagram.PNG) 
 
 ## Build Instructions
 
