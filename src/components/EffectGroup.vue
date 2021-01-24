@@ -8,6 +8,7 @@
           Effect
       }
       /*methods: {
+        // validation method for effect group checks
       }*/
   }
 </script>

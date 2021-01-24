@@ -8,6 +8,7 @@
           Severity
       }
       /*methods: {
+        // validation method for severity group checks
       }*/
   }
 </script>
