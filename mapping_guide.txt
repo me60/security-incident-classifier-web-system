@@ -1,0 +1,26 @@
+Answer - Effect
+- How
+	- Activated via a button on the form itself (currently no support for anything else, but I'm sure that can be arranged)
+- Operations
+	- activate
+	- deactivate
+
+Effect - Intermediate
+- How
+	- On activate/deactivate
+- Operations
+	- addToCounter
+	- subtractFromCounter
+	- incrementClass
+	- decrementClass
+	- flipSwitch
+
+- Intermediate - Severity
+- How
+	- On any Effect - Intermediate operation call
+- Operations
+	- updateSeverityExclusively(severity)
+	- updateSeverityInclusively({severities})
+
+- Intermediate - Intermediate
+- Herm... Not yet...
