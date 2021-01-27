@@ -1,12 +1,14 @@
 <template>
+    <b>Very good</b>
 </template>
 
 <script>
+  //import Severity from './Severity.vue'
   export default {
-      name: "SeverityGroup",
+      name: "SeverityGroup"/*,
       components: {
           Severity
-      }
+      }*/
       /*methods: {
         // validation method for severity group checks
       }*/
