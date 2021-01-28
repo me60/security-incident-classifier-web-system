@@ -29,12 +29,12 @@ Effect - Intermediate
 	- What happens if multiple intermediates control the active severity of the same severity system?
 		- Intermediates hold a priority variable, which is of boolean type - if it is activated for an intermediate, that intermediates' updateSeverity* against a severity system takes priority, regardless of the other intermediates' activation
 	- What if there is an ordering to multiple intermediates as they apply against the same severity system?
-		- In this situation, there may be 3 or more intermediates applying to the same severity system - in this case, the boolean still stands, and may stand for multiple - I shall test this functionality with some theoretical severity systems, 		  making sure the behaviour is correct, however, I've yet to come across a calculator that utilises the above case where priority needs to be considered across two intermediates, let alone more than that. I have time to do more research 		  on this edge case as the project develops
+		- In this situation, there may be 3 or more intermediates applying to the same severity system - in this case, the boolean still stands, and may stand for multiple - I shall test this functionality with some theoretical severity systems, 		  making sure the behaviour is correct, however, I've yet to come across a calculator that utilises the above case where priority needs to be considered across two intermediates, let alone more than that. I have time to do more research 		  	  on this edge case as the project develops
 	- What if the construction of the MapWeb conflicts with how mappings should work?
 		- The program will throw errors, here are the following cases:
 			- Syntactical
 				- Given by Vue unfortunately, however, I may be able to overrided the given error message to include a message about following MapWeb JSON usage
-				- In any case, a guide will be provided on how the MapWeb JSON is written
+				- In any case, a guide will be provided on how the MapWeb JSON object should be written in the App.vue file
 			- Logical
 				- If the number of severity classes an intermediate has does not match the number of severity classes that the connecting effect groups are capable of signalling OR If a declared intermediate contains classes/binary 				 	  states/thresholds that are never used
 				- To calculate thresholds for counter intermediates, I'll have to iterate over every effect and calculate the sum of the weightings, if this is not exactly equal to the largest threshold, throw an error

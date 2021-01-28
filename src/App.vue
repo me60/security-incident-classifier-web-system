@@ -175,6 +175,26 @@
             console.log("hi");
             EventBus.$emit('validateEffectGroups', this.effect_groups);
             EventBus.$emit('validateSeverities', this.severity_groups);
+
+            /*If the number of severity classes an intermediate has does not
+            match the number of severity classes that the connecting effect
+            groups are capable of signalling OR If a declared intermediate
+            contains classes/binary states/thresholds that are never used*/
+
+            /*"To calculate thresholds for counter intermediates, I'll have to
+            iterate over every effect and calculate the sum of the weightings,
+            if this is not exactly equal to the largest threshold, throw an
+            error"*/
+
+            /*If each effect does not have an associated mapping to an
+            intermediate, even if the mapping does not affect an end severity*/
+
+            /*If an intermediate is referenced in an effect-intermediate mapping
+            that is not declared as an intermediate used by the effect group*/
+
+            /*If the effect-intermediate mappings for a binary are anything but
+            true and false*/
+
         } // triggerValidation
     }
   }
