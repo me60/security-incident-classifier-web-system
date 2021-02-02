@@ -45,6 +45,11 @@
     data() {
         return {
             // Define the enums used for the MapWeb
+            /* Remove enums, include validation checking by strings and ensure
+            there is appropriate explanation for implicit type checking in the
+            explanation docs for the MapWeb JSON type, else, the maintainer may
+            be unsure of why they are getting an error (enums make things easier
+            but aren't available easily here - the below code block is clunky)*/
             inc : Enum_Intermediate_Type.INCREMENT,
             bin : Enum_Intermediate_Type.BINARY,
             count : Enum_Intermediate_Type.COUNTER,

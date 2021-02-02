@@ -1,5 +1,9 @@
 # security-incident-classifier-web-system
 
+!Notes for submission
+
+Included in this submission isn't everything required to run the code as it requires dependencies that are too large to submit to MMS. However, it does include the elements of the project that I have created.
+
 A Dynamic Security Incident Classifier Web System for eventual use by IT services here at the university, with the possibility to configure and present classification engines like the Common Vulnerability Scoring System (CVSS - https://www.first.org/cvss/calculator/3.1), with more emphasis on University assets.
 
 The system is designed in such a way that it can accommodate any combination of questions and answers, and how a specific answer chosen affects an end-severity for which there may be many. The motivation as well as increased reasoning of the following model can be found in the documentation. Questions have an off-screen mapping to Effects, which relate to final Severities displayed to the user at the bottom of the current form. Logic that governs the specific way in which Effects alter severities is controlled via how Effects are intermediately mapped to Severities, as such, they are referred to as Intermediates:
