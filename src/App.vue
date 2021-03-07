@@ -2,7 +2,7 @@
 <template>
   <div id="app">
     <Header />
-    <EffectGroup v-bind:effect_groups="effect_groups"/>
+    <EffectGroup v-bind:effect_groups="effect_groups" v-bind:all_intermediates="all_intermediates" />
     <Intermediate />
     <SeverityGroup />
     <Results />
@@ -18,20 +18,6 @@
   import EffectGroup from './components/EffectGroup.vue'
   import Intermediate from './components/Intermediate.vue'
   import SeverityGroup from './components/SeverityGroup.vue'
-  var Enum_Question_Type = {
-      YES_NO : "yes_no",
-      ONE_PICK : "one_pick",
-      MULTI_PICK : "multi_pick"
-  };
-  var Enum_Intermediate_Type = {
-      INCREMENT : "increment",
-      BINARY : "binary",
-      COUNTER : "counter"
-  };
-  var Enum_Severity_Type = {
-      INCLUSIVE : "inclusive",
-      EXCLUSIVE : "exclusive"
-  };
   export default {
     name: 'App',
     components: {
@@ -44,50 +30,34 @@
     },
     data() {
         return {
-            // Define the enums used for the MapWeb
-            /* Remove enums, include validation checking by strings and ensure
-            there is appropriate explanation for implicit type checking in the
-            explanation docs for the MapWeb JSON type, else, the maintainer may
-            be unsure of why they are getting an error (enums make things easier
-            but aren't available easily here - the below code block is clunky)*/
-            inc : Enum_Intermediate_Type.INCREMENT,
-            bin : Enum_Intermediate_Type.BINARY,
-            count : Enum_Intermediate_Type.COUNTER,
-            yesno : Enum_Question_Type.YES_NO,
-            onepick : Enum_Question_Type.ONE_PICK,
-            multipick : Enum_Question_Type.MULTI_PICK,
-            exclusive : Enum_Severity_Type.EXCLUSIVE,
-            Enum_Intermediate_Type,
-            Enum_Question_Type,
-            Enum_Severity_Type,
             all_intermediates : [
                 {
                     name : "amount_severity_controller",
-                    type : this.inc,
+                    type : "inc",
                     classes : 3,
                     priority : true
                 },
                 {
                     name : "covering_severity_controller",
-                    type : this.inc,
+                    type : "inc",
                     classes : 3,
                     priority : true
                 },
                 {
                     name : "ant_colour_controller",
-                    type : this.bin,
+                    type : "bin",
                     priority : true
                 },
                 {
                     name : "place_dropped_controller",
-                    type : this.count,
+                    type : "count",
                     thresholds : [1,2,3],
                     priority : true
                 }
             ],
             effect_groups : [{
                     question_text : "How much bread was dropped?",
-                    type : this.onepick,
+                    type : "onepick",
                     effects : ["Crumbs","Bits","Slice","Loaf"],
                     intermediates : ["amount_severity_controller"],
                     effect_intermediate_control : [
@@ -99,7 +69,7 @@
                 },
                 {
                     question_text : "What was on the bread?",
-                    type : this.onepick,
+                    type : "onepick",
                     effects : ["Nothing","Butter","Jam"],
                     intermediates : ["covering_severity_controller"],
                     effect_intermediate_control : [
@@ -110,7 +80,8 @@
                 },
                 {
                     question_text : "Are the ants red?",
-                    type : this.yesno,
+                    type : "onepick",
+                    effects : ["Yes","No"],
                     intermediates : ["ant_colour_controller"],
                     effect_intermediate_control : [
                         {affecting_intermediate : "ant_colour_controller", effect : "Yes", state : true},
@@ -119,7 +90,7 @@
                 },
                 {
                     question_text : "Where was the bread dropped?",
-                    type : this.multipick,
+                    type : "multipick",
                     effects : ["Kitchen","Bathroom","Bedroom"],
                     intermediates : ["place_dropped_controller"],
                     effect_intermediate_control : [
@@ -132,7 +103,7 @@
             severity_groups : [
                 {
                     name : "general_severity",
-                    type : this.exclusive,
+                    type : "exclusive",
                     severities : ["Not Severe","Pretty Bad","Infestation Likely"],
                     intermediates : ["amount_severity_controller","covering_severity_controller"],
                     severity_intermediate_control : [
@@ -143,7 +114,7 @@
                 },
                 {
                     name : "ant_type_severity",
-                    type : this.exclusive,
+                    type : "exclusive",
                     severities : ["Normal Ants","Fire Ants!"],
                     intermediates : ["ant_colour_controller"],
                     severity_intermediate_control : [
@@ -153,7 +124,7 @@
                 },
                 {
                     name : "rooms_severity",
-                    type : this.exclusive,
+                    type : "exclusive",
                     severities : ["1 Room Affected","2 Rooms Affected","3 Rooms Affected"],
                     intermediates : ["place_dropped_controller"],
                     severity_intermediate_control : [
@@ -166,7 +137,8 @@
         }
     },
     created: function () {
-        this.triggerOtherComponentValidation()
+        this.triggerOtherComponentValidation();
+        this.triggerFormBuild();
     },
     methods : {
         /**
@@ -186,6 +158,10 @@
             groups are capable of signalling OR If a declared intermediate
             contains classes/binary states/thresholds that are never used*/
 
+            /* Ordering of effect_intermediate_control needs to match the
+            ordering of the effects, i.e. if the effects are yes and no, the
+            control objects need to be in the order of yes then no*/
+
             /*"To calculate thresholds for counter intermediates, I'll have to
             iterate over every effect and calculate the sum of the weightings,
             if this is not exactly equal to the largest threshold, throw an
@@ -200,7 +176,18 @@
             /*If the effect-intermediate mappings for a binary are anything but
             true and false*/
 
-        } // triggerValidation
+        }, // triggerValidation
+
+        /**
+         * Sends an event along the event bus that specifies for the form to be
+         * built - this includes only the questions and answers to MWOM
+         * configured questions
+         */
+        triggerFormBuild : function () {
+            console.log("Autoconfiguring questions and answer buttons etc.");
+            console.log("checking changes..."); 
+            EventBus.$emit('buildForm', this.effect_groups);
+        } // triggerFormBuild
     }
   }
 </script>
@@ -221,5 +208,10 @@
   h4 {
     font-weight: bold;
     font-style: italic;
+  }
+  button,radio {
+      font-size: 20px;
+      background-color: gray;
+      border: 2px solid black;
   }
 </style>

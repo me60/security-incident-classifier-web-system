@@ -1,26 +1,41 @@
 <template>
-  <div id="effects">
-    <div v-for="effect in effects" v-bind:key="effect">
-        <button type="button">{{effect}}</button>
-    </div>
-  </div>
+      <div id="effects">
+          <div v-if="c_class" != null>
+              <IncrementEffect v-bind:c_class="c_class" v-bind:p_q_type="p_q_type" v-bind:a_i="a_i" v-bind:name="name" />
+          </div>
+          <div v-if="state" != null>
+              <BinaryEffect v-bind:state="state" v-bind:p_q_type="p_q_type" v-bind:a_i="a_i" v-bind:name="name" />
+          </div>
+          <div v-if="weight" != null>
+              <CounterEffect v-bind:weight="weight" v-bind:p_q_type="p_q_type" v-bind:a_i="a_i" v-bind:name="name" />
+          </div>
+      </div>
 </template>
 
 <script>
-  //<button type="button" v-on:click="buttonHandler">{{effect}}</button>
-  export default {
-    name: "Effect",
-    props: ["effects"]/*,
-
-    methods: {
-      // method that triggers on all button clicks...
-      buttonHandler: function (event) {
-        // ...for button clicks where the parent question is in the personal data table
-        // ...signal event bus with p_data and "yes" if it was yes or "no" if it was no
-      }
-    }*/
-  }
+    import IncrementEffect from './IncrementEffect.vue';
+    import BinaryEffect from './BinaryEffect.vue';
+    import CounterEffect from './CounterEffect.vue'
+    export default {
+        name: "Effect",
+        // a_i = affecting_intermediate, p_q_type = parent question type
+        props: ["name", "a_i", "p_q_type", "c_class", "state", "weight"],
+        components: {
+            IncrementEffect,
+            BinaryEffect,
+            CounterEffect
+        }
+    }
 </script>
 
 <style>
+    #multipick {
+        background-color: blue;
+    }
+    #multipick:active {
+        background-color: red;
+    }
+    #multipick:visited {
+        background-color: red;
+    }
 </style>
