@@ -2,7 +2,7 @@
 <template>
   <div id="app">
     <Header />
-    <EffectGroup v-bind:effect_groups="effect_groups" v-bind:all_intermediates="all_intermediates" />
+    <EffectGroups :effect_groups="effect_groups" :all_intermediates="all_intermediates" />
     <Intermediate />
     <SeverityGroup />
     <Results />
@@ -15,7 +15,7 @@
   //import Tables from './components/Tables.vue'
   import Header from './components/Header.vue'
   import Results from './components/Results.vue'
-  import EffectGroup from './components/EffectGroup.vue'
+  import EffectGroups from './components/EffectGroups.vue'
   import Intermediate from './components/Intermediate.vue'
   import SeverityGroup from './components/SeverityGroup.vue'
   export default {
@@ -24,7 +24,7 @@
       //Tables,
       Header,
       Results,
-      EffectGroup,
+      EffectGroups,
       Intermediate,
       SeverityGroup
     },
@@ -185,7 +185,7 @@
          */
         triggerFormBuild : function () {
             console.log("Autoconfiguring questions and answer buttons etc.");
-            console.log("checking changes..."); 
+            console.log("checking changes.................");
             EventBus.$emit('buildForm', this.effect_groups);
         } // triggerFormBuild
     }

@@ -1,13 +1,13 @@
 <template>
       <div id="effects">
-          <div v-if="c_class" != null>
-              <IncrementEffect v-bind:c_class="c_class" v-bind:p_q_type="p_q_type" v-bind:a_i="a_i" v-bind:name="name" />
+          <div v-if="c_class != null">
+              <IncrementEffect :c_class="c_class" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" />
           </div>
-          <div v-if="state" != null>
-              <BinaryEffect v-bind:state="state" v-bind:p_q_type="p_q_type" v-bind:a_i="a_i" v-bind:name="name" />
+          <div v-if="state != null">
+              <BinaryEffect :state="state" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" />
           </div>
-          <div v-if="weight" != null>
-              <CounterEffect v-bind:weight="weight" v-bind:p_q_type="p_q_type" v-bind:a_i="a_i" v-bind:name="name" />
+          <div v-if="weight != null">
+             <CounterEffect :weight="weight" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" />
           </div>
       </div>
 </template>
@@ -19,11 +19,17 @@
     export default {
         name: "Effect",
         // a_i = affecting_intermediate, p_q_type = parent question type
-        props: ["name", "a_i", "p_q_type", "c_class", "state", "weight"],
+        // p_q_name = parent question name
+        props: ["name", "a_i", "p_q_type", "p_q_name", "c_class", "state", "weight"],
         components: {
             IncrementEffect,
             BinaryEffect,
             CounterEffect
+        },
+        methods: {
+            debug : function () {
+                console.log("name: " + this.name + " a_i: " + this.a_i + " p_q_type: " + this.p_q_type + " c_class: " + this.c_class + " state: " + this.state + " weight: " + this.weight);
+            } // debug
         }
     }
 </script>

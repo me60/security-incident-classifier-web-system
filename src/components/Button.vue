@@ -1,10 +1,10 @@
 <template>
     <div>
         <div v-if="p_q_type === 'multipick'">
-            <Multipick :name="name" />
+            <Multipick :name="name" :p_q_name="p_q_name" />
         </div>
         <div v-else>
-            <Onepick :name="name" />
+            <Onepick :name="name" :p_q_name="p_q_name" />
         </div>
     </div>
 </template>
@@ -14,7 +14,7 @@
     import Onepick from './Onepick.vue';
     export default {
         name: "Button",
-        props: ["p_q_type", "name"],
+        props: ["p_q_type", "p_q_name", "name"],
         components: {
             Multipick,
             Onepick
