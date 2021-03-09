@@ -12,6 +12,8 @@
 <script>
     import Multipick from './Multipick.vue';
     import Onepick from './Onepick.vue';
+    import EventBus from '../event-bus.js';
+
     export default {
         name: "Button",
         props: ["p_q_type", "p_q_name", "name"],
@@ -24,15 +26,20 @@
                 activated : false
             }
         },
+        mounted() {
+            EventBus.$on('deactivateOnepick', (p_q_name) =>  {
+                if (this.p_q_type === "onepick" && this.p_q_name === p_q_name && this.activated) {
+                    this.deactivate();
+                }
+            });
+        },
         methods: {
-            determineActivation : function () {
-                //this.activated = !(this.activated);
-                this.activated == true ? this.activate() : this.deactivate();
-            },
             activate : function() {
+                this.activated = true;
                 this.$parent.activate();
             },
             deactivate : function() {
+                this.activated = false;
                 this.$parent.deactivate();
             }
         }

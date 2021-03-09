@@ -12,10 +12,10 @@
         },
         methods: {
             activate : function() {
-                console.log("IncrementEffect detected as active!");
+                console.log(this.p_q_name + "." + this.name + " detected as active!");
             },
             deactivate : function() {
-                console.log("IncrementEffect has been deactivated!");
+                console.log(this.p_q_name + "." + this.name + " detected as inactive!");
             }
         }
     }
