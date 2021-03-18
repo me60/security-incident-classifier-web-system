@@ -29,7 +29,22 @@
         methods: {
             debug : function () {
                 console.log("name: " + this.name + " a_i: " + this.a_i + " p_q_type: " + this.p_q_type + " c_class: " + this.c_class + " state: " + this.state + " weight: " + this.weight);
-            } // debug
+            },
+            getEmitEventName : function(activation) {
+                let actString = activation ? "activate" : "deactivate";
+                return this.a_i + "." + actString;
+            },
+            getPayload : function() {
+                if (this.c_class != null) {
+                    return this.p_q_name + "." + this.name + "." + this.c_class;
+                }
+                if (this.weight != null) {
+                    return this.p_q_name + "." + this.name + "." + this.weight;
+                }
+                if (this.state != null) {
+                    return this.p_q_name + "." + this.name + "." + this.state;
+                }
+            }
         }
     }
 </script>
