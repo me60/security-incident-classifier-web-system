@@ -3,8 +3,8 @@
   <div id="app">
     <Header />
     <EffectGroups :effect_groups="effect_groups" :all_intermediates="all_intermediates" />
-    <Intermediate />
-    <SeverityGroup />
+    <Intermediates :all_intermediates="all_intermediates"/>
+    <SeverityGroups />
     <Results />
   </div>
 </template>
@@ -15,18 +15,17 @@
   //import Tables from './components/Tables.vue'
   import Header from './components/Header.vue'
   import Results from './components/Results.vue'
-  import EffectGroups from './components/EffectGroups.vue'
-  import Intermediate from './components/Intermediate.vue'
-  import SeverityGroup from './components/SeverityGroup.vue'
+  import EffectGroups from './components/EffectParentComponent/EffectGroups.vue'
+  import Intermediates from './components/IntermediateParentComponent/Intermediates.vue'
+  import SeverityGroups from './components/SeverityParentComponent/SeverityGroups.vue'
   export default {
     name: 'App',
     components: {
-      //Tables,
       Header,
       Results,
       EffectGroups,
-      Intermediate,
-      SeverityGroup
+      Intermediates,
+      SeverityGroups
     },
     data() {
         return {
@@ -137,8 +136,9 @@
         }
     },
     created: function () {
+        // Validate MWOM logically
         this.triggerOtherComponentValidation();
-        this.triggerFormBuild();
+        // Template component registration builds each component
     },
     methods : {
         /**
@@ -147,9 +147,9 @@
         * issue with the proposed MapWeb
         */
         triggerOtherComponentValidation : function () {
-            console.log("hi");
+
+            // Validation events emitted on creation
             EventBus.$emit('validateIntermediates', this.all_intermediates);
-            console.log("hi");
             EventBus.$emit('validateEffectGroups', this.effect_groups);
             EventBus.$emit('validateSeverities', this.severity_groups);
 
@@ -176,20 +176,9 @@
             /*If the effect-intermediate mappings for a binary are anything but
             true and false*/
 
-        }, // triggerValidation
-
-        /**
-         * Sends an event along the event bus that specifies for the form to be
-         * built - this includes only the questions and answers to MWOM
-         * configured questions
-         */
-        triggerFormBuild : function () {
-            console.log("Autoconfiguring questions and answer buttons etc.");
-            console.log("checking changes.................");
-            EventBus.$emit('buildForm', this.effect_groups);
-        } // triggerFormBuild
+        },
     }
-  }
+}
 </script>
 
 <!-- Global Styling -->

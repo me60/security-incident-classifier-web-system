@@ -41,4 +41,10 @@ Effect - Intermediate
 				- If each effect does not have an associated mapping to an intermediate, even if the mapping does not affect an end severity
 				- If an intermediate is referenced in an effect-intermediate mapping that is not declared as an intermediate used by the effect group
 				- If the effect-intermediate mappings for a binary are anything but true and false
-				- 
+	- The following is a rough protocol for communication as per triggered button events and final severity
+		- Effect-Intermediate
+			- Multipick/Onepick (initial trigger) to Button (deactivation of other button if onepick) to Counter/Binary/IncrementEffect (emit of event to intermeidate component)
+			- As performed in Counter/Binary/IncrementEffect
+				- Emit name: "<intermediate_associated_with_effect (just the affecting intermediate (a_i in code))>.<activate/deactivate>"
+				- Payload: c_class OR weight OR state
+		- Intermediate-Severity
