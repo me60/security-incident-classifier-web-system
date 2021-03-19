@@ -1,13 +1,13 @@
 <template>
     <div id="intermediate">
         <div v-if="type === 'inc'">
-            <IncrementIntermediate :classes="classes" :name="name" :priority="priority"/>
+            <IncrementIntermediate :classes="classes" :name="name" :priority="priority" :severity_system="severity_system"/>
         </div>
         <div v-if="type === 'bin'">
-            <BinaryIntermediate :name="name" :priority="priority"/>
+            <BinaryIntermediate :name="name" :priority="priority" :severity_system="severity_system"/>
         </div>
         <div v-if="type === 'count'">
-            <CounterIntermediate :name="name" :thresholds="thresholds" :priority="priority"/>
+            <CounterIntermediate :name="name" :thresholds="thresholds" :priority="priority" :severity_system="severity_system"/>
         </div>
     </div>
 </template>
@@ -23,6 +23,16 @@
             IncrementIntermediate,
             BinaryIntermediate,
             CounterIntermediate
+        },
+        methods: {
+            decodeUniqueIdentifier : function(message) {
+                let parts = message.split(".");
+                return parts[0] + "." + parts[1];
+            },
+            decodeAffect : function(message) {
+                let parts = message.split(".");
+                return parts[parts.length-1];
+            }
         }
     }
 </script>

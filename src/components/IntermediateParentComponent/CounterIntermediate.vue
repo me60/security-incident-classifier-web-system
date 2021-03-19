@@ -18,11 +18,16 @@
         mounted() {
             EventBus.$on((this.name + ".activate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
-                let countAffect = this.$parent.decodeNumber(message);
+                console.log(affector);
+                
+                let countAffect = this.$parent.decodeAffect(message);
+                console.log(countAffect);
             });
             EventBus.$on((this.name + ".deactivate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
-                let countAffect = this.$parent.decodeNumber(message);
+                console.log(affector);
+                let countAffect = this.$parent.decodeAffect(message);
+                console.log(countAffect);
             });
         }
     }

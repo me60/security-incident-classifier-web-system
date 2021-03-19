@@ -19,11 +19,15 @@
         mounted() {
             EventBus.$on((this.name + ".activate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
-                let stateEffect = this.$parent.decodeState(message);
+                console.log(affector);
+                let stateAffect = this.$parent.decodeAffect(message);
+                console.log(stateAffect);
             });
             EventBus.$on((this.name + ".deactivate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
-                let stateEffect = this.$parent.decodeState(message);
+                console.log(affector);
+                let stateAffect = this.$parent.decodeAffect(message);
+                console.log(stateAffect);
             });
         }
     }

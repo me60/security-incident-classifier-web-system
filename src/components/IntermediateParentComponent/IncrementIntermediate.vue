@@ -14,7 +14,7 @@
                 /* We maintain a list of affectors and map each index to the
                 index of the class they signal in classAffected*/
                 affectorsActive: [],
-                classAffected: []
+                classesAffected: []
             }
         },
         // Mounted acts as the area where events are listened for
@@ -24,12 +24,37 @@
             for it that the signal is legitimate*/
             EventBus.$on((this.name + ".activate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
-                let classAffect = this.$parent.decodeNumber(message);
+                let classAffect = this.$parent.decodeAffect(message);
+                this.affectorsActive.push(affector);
+                this.classesAffected.push(classAffect);
+                this.evaluateHighestClass();
             });
             EventBus.$on((this.name + ".deactivate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
-                let classAffect = this.$parent.decodeNumber(message);
+                let indexToRemove = this.affectorsActive.indexOf(affector);
+                if (indexToRemove != -1) {
+                    this.affectorsActive.splice(indexToRemove, 1);
+                    this.classesAffected.splice(indexToRemove, 1);
+                } else {
+                    console.log("Something went wrong: Affect " + affector + " was not logged as active within intermediate");
+                }
+                this.evaluateHighestClass();
             });
+        },
+        methods: {
+            evaluateHighestClass : function() {
+                if (this.classesAffected.length == 0) {
+                    return;
+                }
+                let highestClass = this.classesAffected[0];
+                for (let i = 0; i < this.classesAffected.length; i++) {
+                    if (highestClass < this.classesAffected[i]) {
+                        highestClass = this.classesAffected[i];
+                    }
+                }
+                this.currentClass = highestClass;
+                console.log("Highest class is " + this.currentClass);
+            }
         }
     }
 </script>
