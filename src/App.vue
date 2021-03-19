@@ -34,24 +34,28 @@
                     name : "amount_severity_controller",
                     type : "inc",
                     classes : 3,
-                    priority : true
+                    priority : true,
+                    severity_system: "general_severity"
                 },
                 {
                     name : "covering_severity_controller",
                     type : "inc",
                     classes : 3,
-                    priority : true
+                    priority : true,
+                    severity_system: "general_severity"
                 },
                 {
                     name : "ant_colour_controller",
                     type : "bin",
-                    priority : true
+                    priority : true,
+                    severity_system: "ant_type_severity"
                 },
                 {
                     name : "place_dropped_controller",
                     type : "count",
                     thresholds : [1,2,3],
-                    priority : true
+                    priority : true,
+                    severity_system: "rooms_severity"
                 }
             ],
             effect_groups : [{

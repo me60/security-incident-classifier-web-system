@@ -1,7 +1,15 @@
 <template>
     <div id="intermediates">
         <div v-for="intermediate in all_intermediates" :key="intermediate.name">
-            <Intermediate />
+            <div v-if="intermediate.type === 'inc'">
+                <Intermediate :name="intermediate.name" :type="intermediate.type" :classes="intermediate.classes" :priority="intermediate.priority" :severity_system="intermediate.severity_system"/>
+            </div>
+            <div v-if="intermediate.type === 'bin'">
+                <Intermediate :name="intermediate.name" :type="intermediate.type" :priority="intermediate.priority" :severity_system="intermediate.severity_system"/>
+            </div>
+            <div v-if="intermediate.type === 'count'">
+                <Intermediate :name="intermediate.name" :type="intermediate.type" :thresholds="intermediate.thresholds" :priority="intermediate.priority" :severity_system="intermediate.severity_system"/>
+            </div>
         </div>
     </div>
 </template>
