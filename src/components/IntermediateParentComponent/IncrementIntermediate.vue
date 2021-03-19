@@ -6,7 +6,7 @@
     import EventBus from '../../event-bus.js';
     export default {
         name: "IncrementIntermediate",
-        props: ["name", "classes", "priority"],
+        props: ["name", "classes", "priority", "severity_system"],
         data() {
             return {
                 // Class inits at 0, behaviour starts at 1
@@ -47,6 +47,7 @@
                     return;
                 }
                 let highestClass = this.classesAffected[0];
+                let highestBefore = this.currentClass;
                 for (let i = 0; i < this.classesAffected.length; i++) {
                     if (highestClass < this.classesAffected[i]) {
                         highestClass = this.classesAffected[i];
@@ -54,6 +55,17 @@
                 }
                 this.currentClass = highestClass;
                 console.log("Highest class is " + this.currentClass);
+                /* This intermediate has detected a different highest class
+                in accordance with their effect group(s), we should signal
+                the severity group*/
+                if (highestBefore != this.currentClass) {
+                    console.log("Change in this controller's highest detected class, signalling end class");
+                    this.signalSeverity();
+                }
+            },
+            signalSeverity : function() {
+                console.log("Signalling: " + this.severity_system);
+                EventBus.$emit(this.severity_system, this.currentClass);
             }
         }
     }

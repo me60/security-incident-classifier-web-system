@@ -4,8 +4,7 @@
     <Header />
     <EffectGroups :effect_groups="effect_groups" :all_intermediates="all_intermediates" />
     <Intermediates :all_intermediates="all_intermediates"/>
-    <SeverityGroups />
-    <Results />
+    <SeverityGroups :severity_groups="severity_groups"/>
   </div>
 </template>
 
@@ -14,7 +13,7 @@
   import EventBus from './event-bus.js';
   //import Tables from './components/Tables.vue'
   import Header from './components/Header.vue'
-  import Results from './components/Results.vue'
+  //import Results from './components/Results.vue'
   import EffectGroups from './components/EffectParentComponent/EffectGroups.vue'
   import Intermediates from './components/IntermediateParentComponent/Intermediates.vue'
   import SeverityGroups from './components/SeverityParentComponent/SeverityGroups.vue'
@@ -22,7 +21,7 @@
     name: 'App',
     components: {
       Header,
-      Results,
+      //Results,
       EffectGroups,
       Intermediates,
       SeverityGroups
@@ -31,19 +30,19 @@
         return {
             all_intermediates : [
                 {
-                    name : "amount_severity_controller",
+                    name : "general_severity_controller",
                     type : "inc",
                     classes : 3,
                     priority : true,
                     severity_system: "general_severity"
-                },
+                },/*
                 {
                     name : "covering_severity_controller",
                     type : "inc",
                     classes : 3,
                     priority : true,
                     severity_system: "general_severity"
-                },
+                },*/
                 {
                     name : "ant_colour_controller",
                     type : "bin",
@@ -62,23 +61,23 @@
                     question_text : "How much bread was dropped?",
                     type : "onepick",
                     effects : ["Crumbs","Bits","Slice","Loaf"],
-                    intermediates : ["amount_severity_controller"],
+                    intermediates : ["general_severity_controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "amount_severity_controller", effect : "Crumbs", class : 1},
-                        {affecting_intermediate : "amount_severity_controller", effect : "Bits", class : 1},
-                        {affecting_intermediate : "amount_severity_controller", effect : "Slice", class : 2},
-                        {affecting_intermediate : "amount_severity_controller", effect : "Loaf", class : 2}
+                        {affecting_intermediate : "general_severity_controller", effect : "Crumbs", class : 1},
+                        {affecting_intermediate : "general_severity_controller", effect : "Bits", class : 1},
+                        {affecting_intermediate : "general_severity_controller", effect : "Slice", class : 2},
+                        {affecting_intermediate : "general_severity_controller", effect : "Loaf", class : 2}
                     ]
                 },
                 {
                     question_text : "What was on the bread?",
                     type : "onepick",
                     effects : ["Nothing","Butter","Jam"],
-                    intermediates : ["covering_severity_controller"],
+                    intermediates : ["general_severity_controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "covering_severity_controller", effect : "Nothing", class : 1},
-                        {affecting_intermediate : "covering_severity_controller", effect : "Butter", class : 2},
-                        {affecting_intermediate : "covering_severity_controller", effect : "Jam", class : 3}
+                        {affecting_intermediate : "general_severity_controller", effect : "Nothing", class : 1},
+                        {affecting_intermediate : "general_severity_controller", effect : "Butter", class : 2},
+                        {affecting_intermediate : "general_severity_controller", effect : "Jam", class : 3}
                     ]
                 },
                 {
@@ -106,9 +105,10 @@
             severity_groups : [
                 {
                     name : "general_severity",
+                    display_name : "General Severity",
                     type : "exclusive",
                     severities : ["Not Severe","Pretty Bad","Infestation Likely"],
-                    intermediates : ["amount_severity_controller","covering_severity_controller"],
+                    intermediates : ["general_severity_controller"],
                     severity_intermediate_control : [
                         {class_trigger: 1, severity : "Not Severe"},
                         {class_trigger: 2, severity : "Pretty Bad"},
@@ -117,6 +117,7 @@
                 },
                 {
                     name : "ant_type_severity",
+                    display_name : "Ant Type",
                     type : "exclusive",
                     severities : ["Normal Ants","Fire Ants!"],
                     intermediates : ["ant_colour_controller"],
@@ -127,6 +128,7 @@
                 },
                 {
                     name : "rooms_severity",
+                    display_name : "Rooms Involved",
                     type : "exclusive",
                     severities : ["1 Room Affected","2 Rooms Affected","3 Rooms Affected"],
                     intermediates : ["place_dropped_controller"],

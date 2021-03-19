@@ -1,17 +1,20 @@
 <template>
+    <div id="severity_groups">
+        <div v-for="severity_group in severity_groups" :key="severity_group.name">
+            <h3>{{severity_group.display_name}}</h3>
+            <SeverityGroup :name="severity_group.name" :type="severity_group.type" :severities="severity_group.severities" :severity_intermediate_control="severity_group.severity_intermediate_control" />
+        </div>
     </div>
 </template>
 
 <script>
-    //import Severity from './Severity.vue'
+    import SeverityGroup from './SeverityGroup.vue'
     export default {
-        name: "SeverityGroup"/*,
+        name: "SeverityGroups",
         components: {
-          Severity
-        }*/
-        /*methods: {
-            // validation method for severity group checks
-        }*/
+          SeverityGroup
+        },
+        props: ["severity_groups"]
     }
 </script>
 

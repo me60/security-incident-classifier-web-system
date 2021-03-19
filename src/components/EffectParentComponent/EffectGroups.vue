@@ -1,5 +1,5 @@
 <template>
-    <div id="tables">
+    <div id="effect_groups">
 
         <!-- EffectGroups make up the body of the form, loop through each-->
         <div v-for="effect_group in effect_groups" :key="effect_group.question_text">

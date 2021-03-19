@@ -1,5 +1,6 @@
 <template>
-    <b>Hello</b>
+    <div id="Severity">
+    </div>
 </template>
 
 <script>

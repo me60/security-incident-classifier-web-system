@@ -6,29 +6,36 @@
     import EventBus from '../../event-bus.js';
     export default {
         name: "BinaryIntermediate",
-        props: ["name", "priority"],
+        props: ["name", "priority", "severity_system"],
         data() {
             return {
-                // Bin inits at "null", behaviour starts at "true" or "false"
-                // (Keep as string for now even though it's a binary type)
-                state : "null",
-                affectorsActive: [],
-                stateAffected: []
+                // Bin inits at false, behaviour starts on first change
+                state : false
             }
         },
         mounted() {
             EventBus.$on((this.name + ".activate"), (message) =>  {
-                let affector = this.$parent.decodeUniqueIdentifier(message);
-                console.log(affector);
+
+                /* TODO: Priority amongst sending effects, not just
+                intermediate priority*/
+
+                //let affector = this.$parent.decodeUniqueIdentifier(message);
                 let stateAffect = this.$parent.decodeAffect(message);
-                console.log(stateAffect);
+                this.state = stateAffect;
+                this.signalSeverity();
             });
             EventBus.$on((this.name + ".deactivate"), (message) =>  {
-                let affector = this.$parent.decodeUniqueIdentifier(message);
-                console.log(affector);
+                //let affector = this.$parent.decodeUniqueIdentifier(message);
                 let stateAffect = this.$parent.decodeAffect(message);
-                console.log(stateAffect);
+                this.state = stateAffect;
+                this.signalSeverity();
             });
+        },
+        methods: {
+            signalSeverity : function() {
+                console.log("Signalling: " + this.severity_system);
+                EventBus.$emit(this.severity_system, this.state);
+            }
         }
     }
 </script>

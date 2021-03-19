@@ -1,4 +1,4 @@
-Answer - Effect
+	Answer - Effect
 - How
 	- Activated via a button on the form itself (currently no support for anything other than a button, but I'm sure that can be arranged)
 - Operations
@@ -48,3 +48,6 @@ Effect - Intermediate
 				- Emit name: "<intermediate_associated_with_effect (just the affecting intermediate (a_i in code))>.<activate/deactivate>"
 				- Payload: c_class OR weight OR state
 		- Intermediate-Severity
+			- Counter/Binary/IncrementIntermediate (signalSeverity only when internal highest class change is detected)
+				- Emit name: "<affecting_severity_system>"
+				- Payload: class/state/threshold reached
