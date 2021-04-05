@@ -32,6 +32,8 @@
             EventBus.$on((this.name + ".deactivate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
                 let indexToRemove = this.affectorsActive.indexOf(affector);
+
+                // generalise this
                 if (indexToRemove != -1) {
                     this.affectorsActive.splice(indexToRemove, 1);
                     this.classesAffected.splice(indexToRemove, 1);

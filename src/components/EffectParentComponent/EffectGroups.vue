@@ -1,5 +1,5 @@
 <template>
-    <div id="effect_groups">
+    <div id="effect_groups" class="effect_groups">
 
         <!-- EffectGroups make up the body of the form, loop through each-->
         <div v-for="effect_group in effect_groups" :key="effect_group.question_text">
@@ -41,4 +41,10 @@
 </script>
 
 <style>
+    .effect_groups {
+        background: #666699;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+    }
 </style>

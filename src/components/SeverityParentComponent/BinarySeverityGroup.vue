@@ -11,7 +11,7 @@
         props: ["name", "severities", "severity_intermediate_control"],
         data() {
             return {
-                onscreen: "Severity goes here!"
+                onscreen: "Severity will go here on activation!"
             }
         },
         mounted() {

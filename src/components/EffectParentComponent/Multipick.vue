@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button type="button"> {{this.name}} </button>
+        <input type="checkbox" :name="`group${p_q_name}`" :id="`group${p_q_name}`" @change="changeHandler()" /> {{this.name}}
     </div>
 </template>
 
@@ -10,7 +10,12 @@
         props: ["name", "p_q_name"],
         methods: {
             changeHandler : function() {
-                this.$parent.determineActivation();
+                console.log("Clicked multipick");
+                if (this.$parent.activated == false) {
+                    this.$parent.activate();
+                } else {
+                    this.$parent.deactivate();
+                }
             }
         }
     }

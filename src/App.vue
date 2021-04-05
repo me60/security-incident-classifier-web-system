@@ -1,6 +1,7 @@
 <!-- Abstracted HTML Representation -->
 <template>
-  <div id="app">
+  <div id="app" class="app">
+    <title>Security Incident Classifier</title>
     <Header />
     <EffectGroups :effect_groups="effect_groups" :all_intermediates="all_intermediates" />
     <Intermediates :all_intermediates="all_intermediates"/>
@@ -52,7 +53,8 @@
                 {
                     name : "place_dropped_controller",
                     type : "count",
-                    thresholds : [1,2,3],
+                    // Thresholds should always have a 0
+                    thresholds : [0,1,2,3],
                     priority : true,
                     severity_system: "rooms_severity"
                 }
@@ -133,6 +135,7 @@
                     severities : ["1 Room Affected","2 Rooms Affected","3 Rooms Affected"],
                     intermediates : ["place_dropped_controller"],
                     severity_intermediate_control : [
+                        {on_threshold : 0, severity : "No Rooms Affected"},
                         {on_threshold : 1, severity : "1 Room Affected"},
                         {on_threshold : 2, severity : "2 Rooms Affected"},
                         {on_threshold : 3, severity : "3 Rooms Affected"}
@@ -189,24 +192,27 @@
 
 <!-- Global Styling -->
 <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
-  h3 {
-    font-size: 48px;
-  }
-  h4 {
-    font-weight: bold;
-    font-style: italic;
-  }
-  button,radio {
-      font-size: 20px;
-      background-color: gray;
-      border: 2px solid black;
-  }
+    .app {
+        background-color: #333;
+    }
+    #app {
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 60px;
+    }
+    h3 {
+        font-size: 48px;
+    }
+    h4 {
+        font-weight: bold;
+        font-style: italic;
+    }
+    button,radio {
+        font-size: 20px;
+        background-color: gray;
+        border: 2px solid black;
+    }
 </style>
