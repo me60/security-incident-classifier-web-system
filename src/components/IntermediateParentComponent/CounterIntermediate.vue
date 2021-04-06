@@ -6,7 +6,7 @@
     import EventBus from '../../event-bus.js';
     export default {
         name: "CounterIntermediate",
-        props: ["name", "thresholds", "priority", "severity_system"],
+        props: ["name", "thresholds", "priority", "severity_system", "other_intermediate", "i_i_c"],
         data() {
             return {
                 // Count inits at 0, behaviour starts at 1
@@ -60,25 +60,33 @@
                 console.log("Current Count: " + this.currentCount);
                 for (let i = 0; i < this.thresholds.length; i++) {
                     /* !!! Thresholds act as INCLUSIVE boundaries !!!
-                       !!! I will include this in the docs as it could be a
-                       source of a headache to a maintainer*/
+                    I will include this in the docs as it could be a
+                    source of a headache to a maintainer, i.e. if a threshold
+                    sits at 10, a count of 10 will trigger that threshold, NOT
+                    a count of 11*/
                     if (this.currentCount >= this.thresholds[i]) {
                         this.currentThreshold = this.thresholds[i];
                     }
-                    /*if (this.currentCount < this.thresholds[i] && this.thresholds[i] > lower) {
-                        /* Maintain the highest as the thresholds may not be
-                        sorted
-                        console.log(this.currentCount + " " + this.thresholds[i]);
-                        lower = this.thresholds[i];
-                        this.currentThreshold = this.thresholds[i];
-                    }*/
                 }
                 console.log("Current Threshold: " + this.currentThreshold);
+                this.signalIntermediates();
+            },
+            signalIntermediates : function() {
+                if (this.i_i_c.lenth != 0) {
+                    for (let i = 0; i < this.i_i_c.length; i++) {
+                        if (this.i_i_c[i].on_threshold == this.currentThreshold) {
+                            if (this.$parent.lastSentPayload != null) {
+                                this.$parent.deactivateOtherIntermediate();
+                                this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                            } else {
+                                this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                            }
+                        }
+                    }
+                }
                 this.signalSeverity();
             },
             signalSeverity : function() {
-                /*This intermediate will signal the CEILING threshold
-                it evaluates at any one time*/
                 console.log("Signalling: " + this.severity_system);
                 EventBus.$emit(this.severity_system, this.currentThreshold);
             }

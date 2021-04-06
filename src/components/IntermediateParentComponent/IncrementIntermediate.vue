@@ -6,7 +6,7 @@
     import EventBus from '../../event-bus.js';
     export default {
         name: "IncrementIntermediate",
-        props: ["name", "classes", "priority", "severity_system"],
+        props: ["name", "classes", "priority", "severity_system", "other_intermediate", "i_i_c"],
         data() {
             return {
                 // Class inits at 0, behaviour starts at 1
@@ -62,8 +62,21 @@
                 the severity group*/
                 if (highestBefore != this.currentClass) {
                     console.log("Change in this controller's highest detected class, signalling end class");
-                    this.signalSeverity();
+                    this.signalIntermediates();
                 }
+            },
+            signalIntermediates : function() {
+                for (let i = 0; i < this.i_i_c.length; i++) {
+                    if (this.i_i_c[i].class_trigger == this.currentClass) {
+                        if (this.$parent.lastSentPayload != null) {
+                            this.$parent.deactivateOtherIntermediate();
+                            this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                        } else {
+                            this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                        }
+                    }
+                }
+                this.signalSeverity();
             },
             signalSeverity : function() {
                 console.log("Signalling: " + this.severity_system);

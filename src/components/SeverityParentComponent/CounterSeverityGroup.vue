@@ -18,7 +18,6 @@
             EventBus.$on((this.name), (message) => {
                 for (let i = 0; i < this.severity_intermediate_control.length; i++) {
                     if (message == this.severity_intermediate_control[i].on_threshold) {
-                        console.log("eyy");
                         console.log(this.severity_intermediate_control[i].severity);
                         this.onscreen = this.severity_intermediate_control[i].severity;
                     }

@@ -1,0 +1,99 @@
+all_intermediates : [
+                {
+                    name : "university_confidential_data_controller",
+                    type : "inc",
+                    classes : 4,
+                    priority : true,
+                    severity_system: "university_confidential_data_severity"
+		    intermediate_intermediate_control : {
+		    }
+                },
+                {
+                    name : "personal_data_controller",
+                    type : "bin",
+                    priority : true,
+                    severity_system: "personal_data_severity"
+                },
+                {
+                    name : "risk_heat_map_controller",
+                    type : "count",
+                    // Thresholds should always have a 0
+                    thresholds : [0,1,5,9,13],
+                    priority : true,
+                    severity_system: "risk_heat_map_severity"
+                }
+            ],
+            effect_groups : [{
+                    question_text : "How much bread was dropped?",
+                    type : "onepick",
+                    effects : ["Crumbs","Bits","Slice","Loaf"],
+                    intermediates : ["general_severity_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "general_severity_controller", effect : "Crumbs", class : 1},
+                        {affecting_intermediate : "general_severity_controller", effect : "Bits", class : 1},
+                        {affecting_intermediate : "general_severity_controller", effect : "Slice", class : 2},
+                        {affecting_intermediate : "general_severity_controller", effect : "Loaf", class : 2}
+                    ]
+                },
+                {
+                    question_text : "Are the ants red?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["ant_colour_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "ant_colour_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "ant_colour_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Where was the bread dropped?",
+                    type : "multipick",
+                    effects : ["Kitchen","Bathroom","Bedroom"],
+                    intermediates : ["place_dropped_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "place_dropped_controller", effect : "Kitchen", weight : 1},
+                        {affecting_intermediate : "place_dropped_controller", effect : "Bathroom", weight : 1},
+                        {affecting_intermediate : "place_dropped_controller", effect : "Bedroom", weight : 1}
+                    ]
+                }
+            ],
+            severity_groups : [
+                {
+                    name : "university_confidential_data_severity",
+                    display_name : "University Confidential Data",
+                    type : "exclusive",
+                    severities : ["No data stored","Public","Internal","Confidential","Strictly Confidential"],
+                    intermediates : ["university_confidential_data_controller"],
+                    severity_intermediate_control : [
+                        {class_trigger: 1, severity : "Public"},
+                        {class_trigger: 2, severity : "Internal"},
+                        {class_trigger: 3, severity : "Confidential"},
+			{class_trigger: 4, severity : "Strictly Confidential"}
+                    ]
+                },
+                {
+                    name : "personal_data_severity",
+                    display_name : "Personal Data",
+                    type : "exclusive",
+                    severities : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    severity_intermediate_control : [
+                        {bin_trigger : true, severity : "Yes"},
+                        {bin_trigger : false, severity : "No"}
+                    ]
+                },
+                {
+                    name : "risk_heat_map_severity",
+                    display_name : "Incident Classification",
+                    type : "exclusive",
+                    severities : ["Category A / NCSC 6","Category B / NCSC 5","Category C / NCSC 4","Category D / NCSC 3"],
+                    intermediates : ["place_dropped_controller"],
+                    severity_intermediate_control : [
+                        {on_threshold : 0, severity : "N/A"},
+                        {on_threshold : 1, severity : "Category A / NCSC 6"},
+                        {on_threshold : 5, severity : "Category B / NCSC 5"},
+                        {on_threshold : 9, severity : "Category C / NCSC 4"},
+			{on_threshold : 13, severity : "Category D / NCSC 3"}
+                    ]
+                }
+            ]

@@ -31,114 +31,230 @@
         return {
             all_intermediates : [
                 {
-                    name : "general_severity_controller",
+                    name : "university_confidential_data_controller",
                     type : "inc",
-                    classes : 3,
+                    classes : 4,
                     priority : true,
-                    severity_system: "general_severity"
-                },/*
-                {
-                    name : "covering_severity_controller",
-                    type : "inc",
-                    classes : 3,
-                    priority : true,
-                    severity_system: "general_severity"
-                },*/
-                {
-                    name : "ant_colour_controller",
-                    type : "bin",
-                    priority : true,
-                    severity_system: "ant_type_severity"
+                    severity_system: "university_confidential_data_severity",
+                    other_intermediate: "risk_heat_map_controller",
+                    intermediate_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", class_trigger: 1, weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", class_trigger: 2, weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", class_trigger: 3, weight : 2},
+                        {affecting_intermediate : "risk_heat_map_controller", class_trigger: 4, weight : 3}
+                    ]
                 },
                 {
-                    name : "place_dropped_controller",
+                    name : "personal_data_controller",
+                    type : "bin",
+                    priority : true,
+                    severity_system: "personal_data_severity",
+                    other_intermediate: "risk_heat_map_controller",
+                    intermediate_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", bin_trigger: true, weight : 5},
+                        {affecting_intermediate : "risk_heat_map_controller", bin_trigger: false, weight : 0}
+                    ]
+                },
+                {
+                    name : "risk_heat_map_controller",
                     type : "count",
                     // Thresholds should always have a 0
-                    thresholds : [0,1,2,3],
+                    thresholds : [0,1,5,9,13],
                     priority : true,
-                    severity_system: "rooms_severity"
+                    severity_system: "risk_heat_map_severity",
+                    intermediate_intermediate_control : [
+                        {}
+                    ]
                 }
             ],
             effect_groups : [{
-                    question_text : "How much bread was dropped?",
-                    type : "onepick",
-                    effects : ["Crumbs","Bits","Slice","Loaf"],
-                    intermediates : ["general_severity_controller"],
+                    question_text : "Incident Classification",
+                    type : "multipick",
+                    effects : ["External Investigation","Malicious Code","Internal Investigation","Copyright Infrigement","Denial of Service","Unauthorised Access","APT","Social","Threat/Extortion/Blackmail"],
+                    intermediates : ["risk_heat_map_controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "general_severity_controller", effect : "Crumbs", class : 1},
-                        {affecting_intermediate : "general_severity_controller", effect : "Bits", class : 1},
-                        {affecting_intermediate : "general_severity_controller", effect : "Slice", class : 2},
-                        {affecting_intermediate : "general_severity_controller", effect : "Loaf", class : 2}
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "External Investigation", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Malicious Code", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Internal Investigation", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Copyright Infrigement", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Denial of Service", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Unauthorised Access", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "APT", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Social", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Threat/Extortion/Blackmail", weight : 0}
                     ]
                 },
                 {
-                    question_text : "What was on the bread?",
+                    question_text : "Are we being asked to provide investigation data to an external party?",
                     type : "onepick",
-                    effects : ["Nothing","Butter","Jam"],
-                    intermediates : ["general_severity_controller"],
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "general_severity_controller", effect : "Nothing", class : 1},
-                        {affecting_intermediate : "general_severity_controller", effect : "Butter", class : 2},
-                        {affecting_intermediate : "general_severity_controller", effect : "Jam", class : 3}
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
                     ]
                 },
                 {
-                    question_text : "Are the ants red?",
+                    question_text : "Is the incident ongoing or over?",
+                    type : "onepick",
+                    effects : ["Over","Ongoing","Unknown"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Over", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Unknown", weight : 2},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Ongoing", weight : 1}
+                    ]
+                },
+                {
+                    question_text : "Have we lost access to data?",
+                    type : "onepick",
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
+                    ]
+                },
+                {
+                    question_text : "Are back-ups available?",
+                    type : "onepick",
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 1}
+                    ]
+                },
+                {
+                    question_text : "Is this a critical time in the calendar for those involved?",
+                    type : "onepick",
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
+                    ]
+                },
+                {
+                    question_text : "If a system is affected, can business continue without it?",
+                    type : "onepick",
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 1}
+                    ]
+                },
+                {
+                    question_text : "If a system is affected, is the system critical to the functioning of the Uni?",
+                    type : "onepick",
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
+                    ]
+                },
+                {
+                    question_text : "Does this have potential to spread automatically?",
+                    type : "onepick",
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 3},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
+                    ]
+                },
+                {
+                    question_text : "Does this feel like a major incident?",
                     type : "onepick",
                     effects : ["Yes","No"],
-                    intermediates : ["ant_colour_controller"],
+                    intermediates : ["risk_heat_map_controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "ant_colour_controller", effect : "Yes", state : true},
-                        {affecting_intermediate : "ant_colour_controller", effect : "No", state : false}
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 3},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
                     ]
                 },
                 {
-                    question_text : "Where was the bread dropped?",
-                    type : "multipick",
-                    effects : ["Kitchen","Bathroom","Bedroom"],
-                    intermediates : ["place_dropped_controller"],
+                    question_text : "Is there a potential cost to the incident?",
+                    type : "onepick",
+                    effects : ["None","Up to 10k","Between 10k and 100k","Over 100k"],
+                    intermediates : ["risk_heat_map_controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "place_dropped_controller", effect : "Kitchen", weight : 1},
-                        {affecting_intermediate : "place_dropped_controller", effect : "Bathroom", weight : 1},
-                        {affecting_intermediate : "place_dropped_controller", effect : "Bedroom", weight : 1}
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "None", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Up to 10k", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Between 10k and 100k", weight : 2},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Over 100k", weight : 3}
                     ]
-                }
+                },
+                {
+                    question_text : "How many people are involved? (does not include data breach)",
+                    type : "onepick",
+                    effects : ["0","1 to 5","6 to 10","More than 10"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "0", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "1 to 5", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "6 to 10", weight : 2},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "More than 10", weight : 3}
+                    ]
+                },
+                {
+                    question_text : "Are VIPs affected",
+                    type : "onepick",
+                    effects : ["n/a or don't know","Yes","No"],
+                    intermediates : ["risk_heat_map_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
+                    ]
+                },
             ],
             severity_groups : [
                 {
-                    name : "general_severity",
-                    display_name : "General Severity",
+                    name : "university_confidential_data_severity",
+                    display_name : "University Confidential Data",
                     type : "exclusive",
-                    severities : ["Not Severe","Pretty Bad","Infestation Likely"],
-                    intermediates : ["general_severity_controller"],
+                    severities : ["No data stored","Public","Internal","Confidential","Strictly Confidential"],
+                    intermediates : ["university_confidential_data_controller"],
                     severity_intermediate_control : [
-                        {class_trigger: 1, severity : "Not Severe"},
-                        {class_trigger: 2, severity : "Pretty Bad"},
-                        {class_trigger: 3, severity : "Infestation Likely"}
+                        {class_trigger: 1, severity : "Public"},
+                        {class_trigger: 2, severity : "Internal"},
+                        {class_trigger: 3, severity : "Confidential"},
+                        {class_trigger: 4, severity : "Strictly Confidential"}
                     ]
                 },
                 {
-                    name : "ant_type_severity",
-                    display_name : "Ant Type",
+                    name : "personal_data_severity",
+                    display_name : "Personal Data",
                     type : "exclusive",
-                    severities : ["Normal Ants","Fire Ants!"],
-                    intermediates : ["ant_colour_controller"],
+                    severities : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
                     severity_intermediate_control : [
-                        {bin_trigger : true, severity : "Fire Ants!"},
-                        {bin_trigger : false, severity : "Normal Ants"}
+                        {bin_trigger : true, severity : "Yes"},
+                        {bin_trigger : false, severity : "No"}
                     ]
                 },
                 {
-                    name : "rooms_severity",
-                    display_name : "Rooms Involved",
+                    name : "risk_heat_map_severity",
+                    display_name : "Incident Classification",
                     type : "exclusive",
-                    severities : ["1 Room Affected","2 Rooms Affected","3 Rooms Affected"],
+                    severities : ["Category A / NCSC 6","Category B / NCSC 5","Category C / NCSC 4","Category D / NCSC 3"],
                     intermediates : ["place_dropped_controller"],
                     severity_intermediate_control : [
-                        {on_threshold : 0, severity : "No Rooms Affected"},
-                        {on_threshold : 1, severity : "1 Room Affected"},
-                        {on_threshold : 2, severity : "2 Rooms Affected"},
-                        {on_threshold : 3, severity : "3 Rooms Affected"}
+                        {on_threshold : 0, severity : "N/A"},
+                        {on_threshold : 1, severity : "Category A / NCSC 6"},
+                        {on_threshold : 5, severity : "Category B / NCSC 5"},
+                        {on_threshold : 9, severity : "Category C / NCSC 4"},
+                        {on_threshold : 13, severity : "Category D / NCSC 3"}
                     ]
                 }
             ]
