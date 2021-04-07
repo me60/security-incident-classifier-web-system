@@ -23,17 +23,19 @@
 
                 let affector = this.$parent.decodeUniqueIdentifier(message);
                 let stateAffect = this.$parent.decodeAffect(message);
-                console.log("Payload: " + stateAffect);
                 this.affectorsActive.push(affector);
                 this.statesAffected.push(stateAffect);
                 this.determineState();
             });
             EventBus.$on((this.name + ".deactivate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);
-                let stateAffect = this.$parent.decodeAffect(message);
-                console.log("Payload: " + stateAffect);
-                this.affectorsActive.push(affector);
-                this.statesAffected.push(stateAffect);
+                let indexToRemove = this.affectorsActive.indexOf(affector);
+                if (indexToRemove != -1) {
+                    this.affectorsActive.splice(indexToRemove, 1);
+                    this.statesAffected.splice(indexToRemove, 1);
+                } else {
+                    console.log("Something went wrong: Affect " + affector + " was not logged as active within intermediate");
+                }
                 this.determineState();
             });
         },
@@ -41,8 +43,9 @@
             determineState : function() {
                 let a = true;
                 for (let i = 0; i < this.affectorsActive.length; i++) {
+                    console.log("Affector: " + this.affectorsActive[i] + ", Effect: " + this.statesAffected[i]);
                     // May be a source of a headache!
-                    if (this.statesAffected[i]) {
+                    if (this.statesAffected[i] == 'true') {
                         this.currentState = true;
                         a = false;
                     }
@@ -50,7 +53,11 @@
                 if (a) {
                     this.currentState = false;
                 }
-                this.signalIntermediates();
+                if (typeof this.i_i_c !== 'undefined') {
+                    this.signalIntermediates();
+                } else {
+                    this.signalSeverity();
+                }
             },
             signalIntermediates : function() {
                 for (let i = 0; i < this.i_i_c.length; i++) {
@@ -63,9 +70,11 @@
                         // is no previous intermediate-intermediate event stored)
                         // then simply do nothing and send the current event
                         if (this.$parent.lastSentPayload != null) {
+                            console.log("Deactivating");
                             this.$parent.deactivateOtherIntermediate();
                             this.$parent.activateOtherIntermediate(this.i_i_c[i]);
                         } else {
+                            console.log("Activating");
                             this.$parent.activateOtherIntermediate(this.i_i_c[i]);
                         }
                     }
@@ -73,8 +82,8 @@
                 this.signalSeverity();
             },
             signalSeverity : function() {
-                console.log("Signalling: " + this.severity_system);
-                EventBus.$emit(this.severity_system, this.state);
+                //console.log("Signalling: " + this.severity_system);
+                EventBus.$emit(this.severity_system, this.currentState);
             }
         }
     }

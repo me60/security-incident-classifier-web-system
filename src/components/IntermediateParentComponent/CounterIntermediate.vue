@@ -38,7 +38,6 @@
                 let indexToRemove = this.affectorsActive.indexOf(affector);
                 let countAffect = this.$parent.decodeAffect(message);
                 countAffect = parseInt(countAffect, 10);
-                console.log("Subtracting " + countAffect + " from counter");
 
                 // Remove affector unchecked and its count
                 if (indexToRemove != -1) {
@@ -55,9 +54,6 @@
         },
         methods: {
             determineThreshold : function() {
-                //let lower = this.thresholds[0];
-                //console.log("Highest: " + highest);
-                console.log("Current Count: " + this.currentCount);
                 for (let i = 0; i < this.thresholds.length; i++) {
                     /* !!! Thresholds act as INCLUSIVE boundaries !!!
                     I will include this in the docs as it could be a
@@ -69,7 +65,11 @@
                     }
                 }
                 console.log("Current Threshold: " + this.currentThreshold);
-                this.signalIntermediates();
+                if (typeof this.i_i_c !== 'undefined') {
+                    this.signalIntermediates();
+                } else {
+                    this.signalSeverity();
+                }
             },
             signalIntermediates : function() {
                 if (this.i_i_c.lenth != 0) {
@@ -87,7 +87,6 @@
                 this.signalSeverity();
             },
             signalSeverity : function() {
-                console.log("Signalling: " + this.severity_system);
                 EventBus.$emit(this.severity_system, this.currentThreshold);
             }
         }

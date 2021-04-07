@@ -44,8 +44,19 @@
             });
         },
         methods: {
+
+            // TODO : Function to signal intermediate if there's no multipick
+            // active (quirk of multipick, just implement a watcher of some
+            // kind that detects it)
+
             evaluateHighestClass : function() {
                 if (this.classesAffected.length == 0) {
+                    this.currentClass = 0;
+                    if (typeof this.i_i_c !== 'undefined') {
+                        this.signalIntermediates();
+                    } else {
+                        this.signalSeverity();
+                    }
                     return;
                 }
                 let highestClass = this.classesAffected[0];
@@ -62,7 +73,11 @@
                 the severity group*/
                 if (highestBefore != this.currentClass) {
                     console.log("Change in this controller's highest detected class, signalling end class");
-                    this.signalIntermediates();
+                    if (typeof this.i_i_c !== 'undefined') {
+                        this.signalIntermediates();
+                    } else {
+                        this.signalSeverity();
+                    }
                 }
             },
             signalIntermediates : function() {
@@ -79,7 +94,6 @@
                 this.signalSeverity();
             },
             signalSeverity : function() {
-                console.log("Signalling: " + this.severity_system);
                 EventBus.$emit(this.severity_system, this.currentClass);
             }
         }

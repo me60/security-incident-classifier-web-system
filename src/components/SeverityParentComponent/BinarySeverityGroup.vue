@@ -16,11 +16,12 @@
         },
         mounted() {
             EventBus.$on((this.name), (message) =>  {
+                console.log("!!! " + message);
                 for (let i = 0; i < this.severity_intermediate_control.length; i++) {
-                    console.log("!!! " + message + " " + this.severity_intermediate_control[i].bin_trigger);
-                    let equivalent = (message === 'true');
-                    if (equivalent === this.severity_intermediate_control[i].bin_trigger) {
+                    //console.log("compare " + equivalent + " to " + this.severity_intermediate_control[i].bin_trigger + " " + this.severity_intermediate_control[i].severity);
+                    if (message == this.severity_intermediate_control[i].bin_trigger) {
                         this.onscreen = this.severity_intermediate_control[i].severity;
+                        console.log(this.onscreen);
                     }
                 }
             });

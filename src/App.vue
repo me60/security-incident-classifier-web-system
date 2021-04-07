@@ -38,6 +38,8 @@
                     severity_system: "university_confidential_data_severity",
                     other_intermediate: "risk_heat_map_controller",
                     intermediate_intermediate_control : [
+                        // must include controls for each class
+                        {affecting_intermediate : "risk_heat_map_controller", class_trigger: 0, weight : 0},
                         {affecting_intermediate : "risk_heat_map_controller", class_trigger: 1, weight : 0},
                         {affecting_intermediate : "risk_heat_map_controller", class_trigger: 2, weight : 1},
                         {affecting_intermediate : "risk_heat_map_controller", class_trigger: 3, weight : 2},
@@ -63,6 +65,7 @@
                     priority : true,
                     severity_system: "risk_heat_map_severity",
                     intermediate_intermediate_control : [
+                        // must be empty if none
                         {}
                     ]
                 }
@@ -91,7 +94,7 @@
                     intermediates : ["risk_heat_map_controller"],
                     effect_intermediate_control : [
                         {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
-                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 1},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 0},
                         {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
                     ]
                 },
@@ -217,6 +220,220 @@
                         {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
                     ]
                 },
+                {
+                    question_text : "Can the data identify a living individual?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Does the data include any of the following:",
+                    type : "multipick",
+                    effects : ["Racial or Ethnic Origin","Political Opinion","Religious Beliefs","Trade Union Membership","Physical or Mental Health Conditions","Sex Life","Involvement in Criminal Proceedings","Outcomes of Criminal Convictions"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Racial or Ethnic Origin", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "Political Opinion", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "Religious Beliefs", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "Trade Union Membership", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "Physical or Mental Health Conditions", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "Sex Life", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "Involvement in Criminal Proceedings", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "Outcomes of Criminal Convictions", state : true}
+                    ]
+                },
+                {
+                    question_text : "Is there a substantial risk to health, safety or well being to individuals or groups?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Does it involve the prevention or detection of crime?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Might it stop the apprehension or prosecution of an offender?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Does the data include opinions about an individual?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Is the loss of data likely to cause harm or inconvenience to an individual?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Staff contact details (where these do not concern public facing roles)?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Student/staff photograph?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Contracts of employment?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Student transcripts?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Counselling records?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Disciplinary proceedings?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Grievance proceedings?",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    intermediates : ["personal_data_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "personal_data_controller", effect : "Yes", state : true},
+                        {affecting_intermediate : "personal_data_controller", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Does the information lost contain any of the following? (1):",
+                    type : "multipick",
+                    effects : ["Course information","Degree congregation programme (including list of graduates)","Map of University buildings","Opening hours","Press releases"],
+                    intermediates : ["general_severity_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Course information", class : 1},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Degree congregation programme (including list of graduates)", class : 1},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Map of University buildings", class : 1},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Opening hours", class : 1},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Press releases", class : 1},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Published research papers", class : 1},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "University prospectus", class : 1}
+                    ]
+                },
+                {
+                    question_text : "Does the information lost contain any of the following? (2):",
+                    type : "multipick",
+                    effects : ["Budget information","Details of funding settlements","Draft documents (which do not contain personal or sensitive personal data)","Internal audit reports","Internal memos","Key performance indicators","Lecture materials","Minutes of University and School committees","Planning applications","Student statistics (anonymised)"],
+                    intermediates : ["general_severity_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Budget information", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Details of funding settlements", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Draft documents (which do not contain personal or sensitive personal data)", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Internal audit reports", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Internal memos", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Key performance indicators", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Lecture materials", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Minutes of University and School committees", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Planning applications", class : 2},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Student statistics (anonymised)", class : 2}
+                    ]
+                },
+                {
+                    question_text : "Does the information lost contain any of the following? (3):",
+                    type : "multipick",
+                    effects : ["Commercial contracts","Disaster recovery / business continuity plans","Documentation that contains decisions surrounding academic performance","Examination results","Payroll / banking details","Planning / forecasting reports","Procurement / invitation to tender documentation","Research grant applications","Strategic planning","University Risk Register and controls"],
+                    intermediates : ["general_severity_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Commercial contracts", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Disaster recovery / business continuity plans", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Documentation that contains decisions surrounding academic performance", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Examination results", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Payroll / banking details", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Planning / forecasting reports", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Procurement / invitation to tender documentation", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Research grant applications", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Strategic planning", class : 3},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "University Risk Register and controls", class : 3}
+                    ]
+                },
+                {
+                    question_text : "Does the information lost contain any of the following? (4):",
+                    type : "multipick",
+                    effects : ["Accident reports","Bank/credit card details","Case files and correspondence surrounding investigations by a regulatory body","Communications with Government (Ministerial level)","Government (Ministerial level)","Communications with legal counsel","Communications with Police Scotland (operational matters)","Legal proceedings","Passwords and other forms of access control credentials"],
+                    intermediates : ["general_severity_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Accident reports", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Bank/credit card details", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Case files and correspondence surrounding investigations by a regulatory body", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Communications with Government (Ministerial level)", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Government (Ministerial level)", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Communications with legal counsel", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Communications with Police Scotland (operational matters)", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Legal proceedings", class : 4},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Passwords and other forms of access control credentials", class : 4}
+                    ]
+                },
             ],
             severity_groups : [
                 {
@@ -226,6 +443,7 @@
                     severities : ["No data stored","Public","Internal","Confidential","Strictly Confidential"],
                     intermediates : ["university_confidential_data_controller"],
                     severity_intermediate_control : [
+                        {class_trigger: 0, severity : "No Data"},
                         {class_trigger: 1, severity : "Public"},
                         {class_trigger: 2, severity : "Internal"},
                         {class_trigger: 3, severity : "Confidential"},

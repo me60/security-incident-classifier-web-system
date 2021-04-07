@@ -44,7 +44,7 @@
                 if (i_i_c_entry.class != null) {
                     affector = i_i_c_entry.class;
                 }
-                console.log("Signalling: " + this.other_intermediate);
+                //console.log("Signalling: " + this.other_intermediate);
                 let payload = ("I." + this.name + "." + affector);
                 // !!! Intermediates may ONLY have one OTHER intermediate they
                 // can signal (for now)
@@ -56,7 +56,7 @@
                 // has been updated in that another signal is required, we
                 // must deactivate the previous activation
                 // At this stage, other intermediate signal is required
-                console.log("Signalling: " + this.other_intermediate);
+                //console.log("Signalling: " + this.other_intermediate);
                 EventBus.$emit((this.other_intermediate + ".deactivate"), this.lastSentPayload);
             },
             decodeUniqueIdentifier : function(message) {
