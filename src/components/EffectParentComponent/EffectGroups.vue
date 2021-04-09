@@ -24,10 +24,6 @@
         },
         methods: {
 
-            // !!!
-            // TODO: validation method for effect group checks
-            // !!!
-
             /**
              * We can't use console commands in-html so we have to call on a
              * function for js to do it for us

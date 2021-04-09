@@ -1,5 +1,5 @@
 <template>
-    <Button :p_q_type="p_q_type" :p_q_name="p_q_name" :name="name"/>
+    <Button :p_q_type="p_q_type" :p_q_name="p_q_name" :name="name" :basic_trigger="basic_trigger" />
 </template>
 
 <script>
@@ -7,7 +7,7 @@
     import EventBus from '../../event-bus.js';
     export default {
         name: "BinaryEffect",
-        props: ["state", "p_q_type", "p_q_name", "a_i", "name"],
+        props: ["state", "p_q_type", "p_q_name", "a_i", "name", "basic_trigger"],
         components: {
             Button
         },

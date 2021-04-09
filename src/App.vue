@@ -12,9 +12,7 @@
 <!-- Body of single page -->
 <script>
   import EventBus from './event-bus.js';
-  //import Tables from './components/Tables.vue'
   import Header from './components/Header.vue'
-  //import Results from './components/Results.vue'
   import EffectGroups from './components/EffectParentComponent/EffectGroups.vue'
   import Intermediates from './components/IntermediateParentComponent/Intermediates.vue'
   import SeverityGroups from './components/SeverityParentComponent/SeverityGroups.vue'
@@ -94,7 +92,7 @@
                     intermediates : ["risk_heat_map_controller"],
                     effect_intermediate_control : [
                         {affecting_intermediate : "risk_heat_map_controller", effect : "n/a or don't know", weight : 0},
-                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 0},
+                        {affecting_intermediate : "risk_heat_map_controller", effect : "Yes", weight : 0, basic_trigger : "Inform Governance"},
                         {affecting_intermediate : "risk_heat_map_controller", effect : "No", weight : 0}
                     ]
                 },
@@ -457,7 +455,7 @@
                     severities : ["Yes","No"],
                     intermediates : ["personal_data_controller"],
                     severity_intermediate_control : [
-                        {bin_trigger : true, severity : "Yes"},
+                        {bin_trigger : true, severity : "Yes - Possible GDPR Notification Required"},
                         {bin_trigger : false, severity : "No"}
                     ]
                 },
@@ -492,9 +490,9 @@
         triggerOtherComponentValidation : function () {
 
             // Validation events emitted on creation
+            EventBus.$emit('validateSeverities', this.severity_groups);
             EventBus.$emit('validateIntermediates', this.all_intermediates);
             EventBus.$emit('validateEffectGroups', this.effect_groups);
-            EventBus.$emit('validateSeverities', this.severity_groups);
 
             /*If the number of severity classes an intermediate has does not
             match the number of severity classes that the connecting effect

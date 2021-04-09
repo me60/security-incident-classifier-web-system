@@ -16,7 +16,7 @@
 
     export default {
         name: "Button",
-        props: ["p_q_type", "p_q_name", "name"],
+        props: ["p_q_type", "p_q_name", "name", "basic_trigger"],
         components: {
             Multipick,
             Onepick
@@ -29,7 +29,7 @@
         mounted() {
             /* Only the activated onepick button in this EffectGroup will
             trigger on this emitted event, however, it is sent to all*/
-            EventBus.$on('deactivateOnepick', (p_q_name) =>  {
+            EventBus.$on('deactivateOnepick', (p_q_name) => {
                 if (this.p_q_type === "onepick" && this.p_q_name === p_q_name && this.activated) {
                     this.deactivate();
                 }
@@ -38,11 +38,17 @@
         methods: {
             activate : function() {
                 this.activated = true;
+                this.activateTrigger();
                 this.$parent.activate();
             },
             deactivate : function() {
                 this.activated = false;
                 this.$parent.deactivate();
+            },
+            activateTrigger : function() {
+                if (this.basic_trigger != undefined) {
+                    window.alert(this.basic_trigger);
+                }
             }
         }
     }

@@ -1,13 +1,13 @@
 <template>
       <div id="effects">
           <div v-if="c_class != null">
-              <IncrementEffect :c_class="c_class" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" />
+              <IncrementEffect :c_class="c_class" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" :basic_trigger="basic_trigger" />
           </div>
           <div v-if="state != null">
-              <BinaryEffect :state="state" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" />
+              <BinaryEffect :state="state" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" :basic_trigger="basic_trigger" />
           </div>
           <div v-if="weight != null">
-             <CounterEffect :weight="weight" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" />
+             <CounterEffect :weight="weight" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" :basic_trigger="basic_trigger" />
           </div>
       </div>
 </template>
@@ -20,7 +20,7 @@
         name: "Effect",
         // a_i = affecting_intermediate, p_q_type = parent question type
         // p_q_name = parent question name
-        props: ["name", "a_i", "p_q_type", "p_q_name", "c_class", "state", "weight"],
+        props: ["name", "a_i", "p_q_type", "p_q_name", "c_class", "state", "weight", "basic_trigger"],
         components: {
             IncrementEffect,
             BinaryEffect,
@@ -28,7 +28,7 @@
         },
         methods: {
             debug : function () {
-                console.log("name: " + this.name + " a_i: " + this.a_i + " p_q_type: " + this.p_q_type + " c_class: " + this.c_class + " state: " + this.state + " weight: " + this.weight);
+                console.log("name: " + this.name + " a_i: " + this.a_i + " p_q_type: " + this.p_q_type + " c_class: " + this.c_class + " state: " + this.state + " weight: " + this.weight + " basic trigger: " + this.basic_trigger);
             },
             getEmitEventName : function(activation) {
                 let actString = activation ? "activate" : "deactivate";
