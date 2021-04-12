@@ -11,11 +11,12 @@
         props: ["name", "severities", "severity_intermediate_control"],
         data() {
             return {
-                onscreen: "Severity will go here on activation!",
+                onscreen: "-",
                 activeColor: "white"
             }
         },
         mounted() {
+            // This code finds the message to display based on received signal
             EventBus.$on((this.name), (message) => {
                 for (let i = 0; i < this.severity_intermediate_control.length; i++) {
                     if (message == this.severity_intermediate_control[i].on_threshold) {

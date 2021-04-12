@@ -11,15 +11,15 @@
         props: ["name", "severities", "severity_intermediate_control"],
         data() {
             return {
-                onscreen: "Severity will go here on activation!",
+                onscreen: "-",
                 activeColor: "white"
             }
         },
         mounted() {
+            // This code finds the message to display based on received signal
             EventBus.$on((this.name), (message) =>  {
                 console.log("!!! " + message);
                 for (let i = 0; i < this.severity_intermediate_control.length; i++) {
-                    //console.log("compare " + equivalent + " to " + this.severity_intermediate_control[i].bin_trigger + " " + this.severity_intermediate_control[i].severity);
                     if (message == this.severity_intermediate_control[i].bin_trigger) {
                         this.onscreen = this.severity_intermediate_control[i].severity;
                         this.activeColor = this.severity_intermediate_control[i].colour;

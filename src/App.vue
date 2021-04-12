@@ -368,10 +368,11 @@
                 {
                     question_text : "Does the information lost contain any of the following? (1):",
                     type : "multipick",
-                    effects : ["Course information","Degree congregation programme (including list of graduates)","Map of University buildings","Opening hours","Press releases"],
+                    effects : ["Course information","Student ID Card Information","Degree congregation programme (including list of graduates)","Map of University buildings","Opening hours","Press releases", "Published research papers", "University prospectus"],
                     intermediates : ["general_severity_controller"],
                     effect_intermediate_control : [
                         {affecting_intermediate : "university_confidential_data_controller", effect : "Course information", class : 1},
+                        {affecting_intermediate : "university_confidential_data_controller", effect : "Student ID Card Information", class : 1},
                         {affecting_intermediate : "university_confidential_data_controller", effect : "Degree congregation programme (including list of graduates)", class : 1},
                         {affecting_intermediate : "university_confidential_data_controller", effect : "Map of University buildings", class : 1},
                         {affecting_intermediate : "university_confidential_data_controller", effect : "Opening hours", class : 1},

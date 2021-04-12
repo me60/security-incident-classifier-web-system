@@ -17,9 +17,6 @@
             }
         },
 
-        /* TODO: Counter functionality in effects and this intermediate +
-        CodeBlock intermediates!*/
-
         mounted() {
             EventBus.$on((this.name + ".activate"), (message) =>  {
                 let affector = this.$parent.decodeUniqueIdentifier(message);

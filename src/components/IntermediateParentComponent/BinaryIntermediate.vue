@@ -17,10 +17,6 @@
         },
         mounted() {
             EventBus.$on((this.name + ".activate"), (message) =>  {
-
-                /* TODO: Priority amongst sending effects, not just
-                intermediate priority*/
-
                 let affector = this.$parent.decodeUniqueIdentifier(message);
                 let stateAffect = this.$parent.decodeAffect(message);
                 this.affectorsActive.push(affector);
