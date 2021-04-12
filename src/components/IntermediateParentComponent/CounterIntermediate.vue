@@ -74,12 +74,12 @@
             signalIntermediates : function() {
                 if (this.i_i_c.lenth != 0) {
                     for (let i = 0; i < this.i_i_c.length; i++) {
-                        if (this.i_i_c[i].on_threshold == this.currentThreshold) {
+                        if (this.i_i_c[i].on_threshold == this.currentThreshold || this.i_i_c[i].on_threshold == 'any') {
                             if (this.$parent.lastSentPayload != null) {
                                 this.$parent.deactivateOtherIntermediate();
-                                this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                                this.$parent.activateOtherIntermediate(this.i_i_c[i], this.currentThreshold);
                             } else {
-                                this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                                this.$parent.activateOtherIntermediate(this.i_i_c[i], this.currentThreshold);
                             }
                         }
                     }

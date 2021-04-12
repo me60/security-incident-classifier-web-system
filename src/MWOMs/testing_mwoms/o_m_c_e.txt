@@ -1,0 +1,48 @@
+classifier_name : "o_m_c_e",
+            all_intermediates : [
+                {
+                    name : "I1",
+                    type : "count",
+                    thresholds : [0,1,2,3,4],
+                    priority : true,
+                    severity_system: "S1"
+                }
+            ],
+            effect_groups : [
+                {
+                    question_text : "Q1",
+                    type : "onepick",
+                    effects : ["a","b","c"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "I1", effect : "a", weight : 1},
+                        {affecting_intermediate : "I1", effect : "b", weight : 1},
+                        {affecting_intermediate : "I1", effect : "c", weight : 1}
+                    ]
+                },
+                {
+                    question_text : "Q2",
+                    type : "multipick",
+                    effects : ["a","b","c"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "I1", effect : "a", weight : 1},
+                        {affecting_intermediate : "I1", effect : "b", weight : 1},
+                        {affecting_intermediate : "I1", effect : "c", weight : 1}
+                    ]
+                }
+            ],
+            severity_groups : [
+                {
+                    name : "S1",
+                    display_name : "S1",
+                    type : "exclusive",
+                    severities : ["One","Two","Three"],
+                    intermediates : ["I1"],
+                    severity_intermediate_control : [
+                        {on_threshold : 0, severity : "Zero"},
+                        {on_threshold : 1, severity : "One"},
+                        {on_threshold : 2, severity : "Two"},
+                        {on_threshold : 3, severity : "Three"},
+                        {on_threshold : 4, severity : "Four"}
+                    ]
+                }
+            ]

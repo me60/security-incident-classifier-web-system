@@ -1,0 +1,42 @@
+classifier_name : "o_m_b_e",
+            all_intermediates : [
+                {
+                    name : "I1",
+                    type : "bin",
+                    priority : true,
+                    severity_system: "S1"
+                }
+            ],
+            effect_groups : [
+                {
+                    question_text : "Q1",
+                    type : "onepick",
+                    effects : ["Yes","No"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "I1", effect : "Yes", state : true},
+                        {affecting_intermediate : "I1", effect : "No", state : false}
+                    ]
+                },
+                {
+                    question_text : "Q2",
+                    type : "multipick",
+                    effects : ["Yes","No"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "I1", effect : "Yes", state : true},
+                        {affecting_intermediate : "I1", effect : "No", state : false}
+                    ]
+                }
+            ],
+            severity_groups : [
+                {
+                    name : "S1",
+                    display_name : "S1",
+                    type : "exclusive",
+                    severities : ["TRUE","FALSE"],
+                    intermediates : ["I1"],
+                    severity_intermediate_control : [
+                        {bin_trigger : true, severity : "TRUE"},
+                        {bin_trigger : false, severity : "FALSE"}
+                    ]
+                }
+            ]

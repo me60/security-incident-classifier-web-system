@@ -64,7 +64,7 @@
                     // find interacting intermediates (if any) that match with
                     // the current state, signal that intermediate via
                     // effect-intermediate protocol EventBus event
-                    if (this.i_i_c[i].bin_trigger == this.currentState) {
+                    if (this.i_i_c[i].bin_trigger == this.currentState || this.i_i_c[i].bin_trigger == 'any') {
                         // get the last sent intermediate-intermediate event and
                         // deactivate it, if this is the first one sent (i.e. there
                         // is no previous intermediate-intermediate event stored)
@@ -72,10 +72,10 @@
                         if (this.$parent.lastSentPayload != null) {
                             console.log("Deactivating");
                             this.$parent.deactivateOtherIntermediate();
-                            this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                            this.$parent.activateOtherIntermediate(this.i_i_c[i], this.currentState);
                         } else {
                             console.log("Activating");
-                            this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                            this.$parent.activateOtherIntermediate(this.i_i_c[i], this.currentState);
                         }
                     }
                 }

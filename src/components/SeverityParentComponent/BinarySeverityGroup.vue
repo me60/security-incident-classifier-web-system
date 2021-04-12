@@ -1,6 +1,6 @@
 <template>
     <div id="binary_severity_group">
-        <b> {{ this.onscreen }} </b>
+        <b> <div v-bind:style="{ color : activeColor }"> {{ this.onscreen }} </div> </b>
     </div>
 </template>
 
@@ -11,7 +11,8 @@
         props: ["name", "severities", "severity_intermediate_control"],
         data() {
             return {
-                onscreen: "Severity will go here on activation!"
+                onscreen: "Severity will go here on activation!",
+                activeColor: "white"
             }
         },
         mounted() {
@@ -21,6 +22,7 @@
                     //console.log("compare " + equivalent + " to " + this.severity_intermediate_control[i].bin_trigger + " " + this.severity_intermediate_control[i].severity);
                     if (message == this.severity_intermediate_control[i].bin_trigger) {
                         this.onscreen = this.severity_intermediate_control[i].severity;
+                        this.activeColor = this.severity_intermediate_control[i].colour;
                         console.log(this.onscreen);
                     }
                 }

@@ -1,4 +1,5 @@
-all_intermediates : [
+classifier_name : "Ant Infestation Classifier",
+            all_intermediates : [
                 {
                     name : "general_severity_controller",
                     type : "inc",
@@ -75,8 +76,8 @@ all_intermediates : [
                     intermediates : ["general_severity_controller"],
                     severity_intermediate_control : [
                         {class_trigger: 1, severity : "Not Severe"},
-                        {class_trigger: 2, severity : "Pretty Bad"},
-                        {class_trigger: 3, severity : "Infestation Likely"}
+                        {class_trigger: 2, severity : "Pretty Bad", colour : "yellow"},
+                        {class_trigger: 3, severity : "Infestation Likely", colour : "black"}
                     ]
                 },
                 {
@@ -86,7 +87,7 @@ all_intermediates : [
                     severities : ["Normal Ants","Fire Ants!"],
                     intermediates : ["ant_colour_controller"],
                     severity_intermediate_control : [
-                        {bin_trigger : true, severity : "Fire Ants!"},
+                        {bin_trigger : true, severity : "Fire Ants!", colour : "red"},
                         {bin_trigger : false, severity : "Normal Ants"}
                     ]
                 },

@@ -27,6 +27,9 @@
                                 <div v-if="intermediate.type === 'bin'">
                                     <Effect :name="effect" :a_i="intermediate.name" :p_q_type="effect_group.type" :p_q_name="effect_group.question_text" :state="effect_intermediate.state" :basic_trigger="effect_intermediate.basic_trigger" />
                                 </div>
+                                <div v-if="intermediate.type === 'codeblock'">
+                                    <Effect :name="effect" :a_i="intermediate.name" :p_q_type="effect_group.type" :p_q_name="effect_group.question_text" :contribution="effect_intermediate.contribution" :basic_trigger="effect_intermediate.basic_trigger" />
+                                </div>
                             </div>
                         </div>
                     </div>

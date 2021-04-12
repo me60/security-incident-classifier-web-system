@@ -10,6 +10,9 @@
             <div v-if="intermediate.type === 'count'">
                 <Intermediate :name="intermediate.name" :type="intermediate.type" :thresholds="intermediate.thresholds" :priority="intermediate.priority" :severity_system="intermediate.severity_system" :other_intermediate="intermediate.other_intermediate" :i_i_c="intermediate.intermediate_intermediate_control"/>
             </div>
+            <div v-if="intermediate.type === 'codeblock'">
+                <Intermediate :name="intermediate.name" :type="intermediate.type" :pertaining_block="intermediate.pertaining_block" :priority="intermediate.priority" :severity_system="intermediate.severity_system" :other_intermediate="intermediate.other_intermediate" :i_i_c="intermediate.intermediate_intermediate_control"/>
+            </div>
         </div>
     </div>
 </template>

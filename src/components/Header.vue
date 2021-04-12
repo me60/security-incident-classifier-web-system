@@ -1,13 +1,14 @@
 <template>
   <header class="header">
-    <h1>Security Incident Classifier</h1>
-    <h2>University of St. Andrews</h2>
+    <h3>{{ this.classifier_name }}</h3>
+    <h2>Security Incident Classifier SH Project</h2>
   </header>
 </template>
 
 <script>
   export default {
-    name: "Header"
+    name: "Header",
+    props : ["classifier_name"]
   }
 </script>
 

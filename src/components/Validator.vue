@@ -8,13 +8,13 @@
         name : "Validator",
         mounted() {
             EventBus.$on('validateSeverities', (severities) => {
-                // Code goes here
+                console.log("Validating Severities");
             });
             EventBus.$on('validateIntermediates', (intermediates) => {
-                // Code goes here
+                console.log("Validating Intermediates");
             });
             EventBus.$on('validateEffectGroups', (effect_groups) => {
-                // Code goes here
+                console.log("Validating Effect Groups");
             });
         }
     }

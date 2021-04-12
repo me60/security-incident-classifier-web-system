@@ -44,11 +44,6 @@
             });
         },
         methods: {
-
-            // TODO : Function to signal intermediate if there's no multipick
-            // active (quirk of multipick, just implement a watcher of some
-            // kind that detects it)
-
             evaluateHighestClass : function() {
                 if (this.classesAffected.length == 0) {
                     this.currentClass = 0;
@@ -82,12 +77,12 @@
             },
             signalIntermediates : function() {
                 for (let i = 0; i < this.i_i_c.length; i++) {
-                    if (this.i_i_c[i].class_trigger == this.currentClass) {
+                    if (this.i_i_c[i].class_trigger == this.currentClass || this.i_i_c[i].class_trigger == 'any') {
                         if (this.$parent.lastSentPayload != null) {
                             this.$parent.deactivateOtherIntermediate();
-                            this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                            this.$parent.activateOtherIntermediate(this.i_i_c[i], this.currentClass);
                         } else {
-                            this.$parent.activateOtherIntermediate(this.i_i_c[i]);
+                            this.$parent.activateOtherIntermediate(this.i_i_c[i], this.currentClass);
                         }
                     }
                 }

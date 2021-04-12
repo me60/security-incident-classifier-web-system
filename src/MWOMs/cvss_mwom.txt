@@ -1,0 +1,311 @@
+classifier_name : "CVSS Calculator Emulation",
+            all_intermediates : [
+                {
+                    name : "base_metric_group_controller",
+                    type : "codeblock",
+                    severity_system : "base_metric_group_severity",
+                    pertaining_block : "baseCalculator",
+                    intermediate_intermediate_control : [
+                        {affecting_intermediate : "temporal_metric_group_controller", contribution_trigger : "any", contribution : "self"}
+                    ]
+                },
+                {
+                    name : "temporal_metric_group_controller",
+                    type : "codeblock",
+                    severity_system : "temporal_metric_group_severity",
+                    pertaining_block : "temporalCalculator"
+                },
+                {
+                    name : "environmental_metric_group_controller",
+                    type : "codeblock",
+                    severity_system : "environmental_metric_group_severity",
+                    pertaining_block : "environmentalCalculator"
+                }
+            ],
+            effect_groups : [
+                {
+                    question_text : "Attack Vector",
+                    type : "onepick",
+                    effects : ["Network","Adjacent","Local","Physical"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Network", contribution : 0.85},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Adjacent", contribution : 0.62},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Local", contribution : 0.55},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Physical", contribution : 0.20}
+                    ]
+                },
+                {
+                    question_text : "Attack Complexity",
+                    type : "onepick",
+                    effects : ["Low","High"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Low", contribution : 0.77},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "High", contribution : 0.44}
+                    ]
+                },
+                {
+                    question_text : "Privileges Required",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        // These have code stipulations regarding contributions
+                        // I'll need to change values on the fly depending on
+                        // other activations, but the role of this functionality
+                        // is to take power away from the system anyway, so
+                        // hacking should be encouraged
+                        {affecting_intermediate : "base_metric_group_controller", effect : "None", contribution : 0.85},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Low", contribution : 0.62/*base*/},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "High", contribution : 0.27/*base*/}
+                    ]
+                },
+                {
+                    question_text : "User Interaction",
+                    type : "onepick",
+                    effects : ["None","Required"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "base_metric_group_controller", effect : "None", contribution : 0.85},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Required", contribution : 0.62}
+                    ]
+                },
+                {
+                    question_text : "Scope",
+                    type : "onepick",
+                    effects : ["Unchanged","Changed"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        // Remember that for codeblock-interacting effects, the
+                        // contribution can be of any type
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Unchanged", contribution : "Unchanged"},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Changed", contribution : "Changed"}
+                    ]
+                },
+                {
+                    question_text : "Confidentiality",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "base_metric_group_controller", effect : "None", contribution : 0.0},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Low", contribution : 0.22},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "High", contribution : 0.56}
+                    ]
+                },
+                {
+                    question_text : "Availability",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "base_metric_group_controller", effect : "None", contribution : 0.0},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Low", contribution : 0.22},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "High", contribution : 0.56}
+                    ]
+                },
+                {
+                    question_text : "Integrity",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["base_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "base_metric_group_controller", effect : "None", contribution : 0.0},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "Low", contribution : 0.22},
+                        {affecting_intermediate : "base_metric_group_controller", effect : "High", contribution : 0.56}
+                    ]
+                },
+                {
+                    question_text : "Exploit Code Maturity",
+                    type : "onepick",
+                    effects : ["Not Defined","High","Functional","Proof of Concept","Unproven"],
+                    intermediates : ["temporal_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Not Defined", contribution : 1.0},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "High", contribution : 1.0},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Functional", contribution : 0.97},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Proof of Concept", contribution : 0.94},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Unproven", contribution : 0.91}
+                    ]
+                },
+                {
+                    question_text : "Remediation Level",
+                    type : "onepick",
+                    effects : ["Not Defined","Unavailable","Workaround","Temporary Fix","Official Fix"],
+                    intermediates : ["temporal_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Not Defined", contribution : 1.0},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Unavailable", contribution : 1.0},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Workaround", contribution : 0.97},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Temporary Fix", contribution : 0.96},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Official Fix", contribution : 0.95}
+                    ]
+                },
+                {
+                    question_text : "Report Confidence",
+                    type : "onepick",
+                    effects : ["Not Defined","Confirmed","Reasonable","Unknown"],
+                    intermediates : ["temporal_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Not Defined", contribution : 1.0},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Confirmed", contribution : 1.0},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Reasonable", contribution : 0.96},
+                        {affecting_intermediate : "temporal_metric_group_controller", effect : "Unknown", contribution : 0.92}
+                    ]
+                },
+                {
+                    question_text : "Confidentiality Requirement",
+                    type : "onepick",
+                    effects : ["Not Defined","Low","Medium","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Not Defined", contribution : 1.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.5},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Medium", contribution : 1.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 1.5}
+                    ]
+                },
+                {
+                    question_text : "Integrity Requirement",
+                    type : "onepick",
+                    effects : ["Not Defined","Low","Medium","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Not Defined", contribution : 1.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.5},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Medium", contribution : 1.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 1.5}
+                    ]
+                },
+                {
+                    question_text : "Availability Requirement",
+                    type : "onepick",
+                    effects : ["Not Defined","Low","Medium","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Not Defined", contribution : 1.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.5},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Medium", contribution : 1.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 1.5}
+                    ]
+                },
+                {
+                    question_text : "Modified Attack Vector",
+                    type : "onepick",
+                    effects : ["Network","Adjacent","Local","Physical"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Network", contribution : 0.85},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Adjacent", contribution : 0.62},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Local", contribution : 0.55},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Physical", contribution : 0.20}
+                    ]
+                },
+                {
+                    question_text : "Modified Attack Complexity",
+                    type : "onepick",
+                    effects : ["Low","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.77},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 0.44}
+                    ]
+                },
+                {
+                    question_text : "Modified Privileges Required",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        // Same stipulations as normal privileges required
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "None", contribution : 0.85},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.62/*base*/},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 0.27/*base*/}
+                    ]
+                },
+                {
+                    question_text : "Modified User Interaction",
+                    type : "onepick",
+                    effects : ["None","Required"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "None", contribution : 0.85},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Required", contribution : 0.62}
+                    ]
+                },
+                {
+                    question_text : "Modified Confidentiality",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "None", contribution : 0.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.22},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 0.56}
+                    ]
+                },
+                {
+                    question_text : "Modified Availability",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "None", contribution : 0.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.22},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 0.56}
+                    ]
+                },
+                {
+                    question_text : "Modified Integrity",
+                    type : "onepick",
+                    effects : ["None","Low","High"],
+                    intermediates : ["environmental_metric_group_controller"],
+                    effect_intermediate_control : [
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "None", contribution : 0.0},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "Low", contribution : 0.22},
+                        {affecting_intermediate : "environmental_metric_group_controller", effect : "High", contribution : 0.56}
+                    ]
+                },
+            ],
+            severity_groups : [
+                {
+                    name : "base_metric_group_severity",
+                    display_name : "Base Metric Group Severity",
+                    type : "regressive",
+                    intermediates : "base_metric_group_controller",
+                    severity_intermediate_control : [
+                        {on_value : 0.0, severity : "None"},
+                        {on_value : 0.1, severity : "Low"},
+                        {on_value : 4.0, severity : "Medium"},
+                        {on_value : 7.0, severity : "High"},
+                        {on_value : 9.0, severity : "Critical"}
+                    ]
+                },
+                {
+                    name : "temporal_metric_group_severity",
+                    display_name : "Temporal Metric Group Severity",
+                    type : "regressive",
+                    intermediates : "temporal_metric_group_controller",
+                    severity_intermediate_control : [
+                        {on_value : 0.0, severity : "None"},
+                        {on_value : 0.1, severity : "Low"},
+                        {on_value : 4.0, severity : "Medium"},
+                        {on_value : 7.0, severity : "High"},
+                        {on_value : 9.0, severity : "Critical"}
+                    ]
+                },
+                {
+                    name : "environmental_metric_group_severity",
+                    display_name : "Environmental Metric Group Severity",
+                    type : "regressive",
+                    intermediates : "environmental_metric_group_controller",
+                    severity_intermediate_control : [
+                        {on_value : 0.0, severity : "None"},
+                        {on_value : 0.1, severity : "Low"},
+                        {on_value : 4.0, severity : "Medium"},
+                        {on_value : 7.0, severity : "High"},
+                        {on_value : 9.0, severity : "Critical"}
+                    ]
+                }
+            ]

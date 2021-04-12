@@ -2,7 +2,7 @@
 <template>
   <div id="app" class="app">
     <title>Security Incident Classifier</title>
-    <Header />
+    <Header :classifier_name="classifier_name" />
     <EffectGroups :effect_groups="effect_groups" :all_intermediates="all_intermediates" />
     <Intermediates :all_intermediates="all_intermediates"/>
     <SeverityGroups :severity_groups="severity_groups"/>
@@ -27,6 +27,7 @@
     },
     data() {
         return {
+            classifier_name : "University of St. Andrews Incident Classifier",
             all_intermediates : [
                 {
                     name : "university_confidential_data_controller",
@@ -441,11 +442,11 @@
                     severities : ["No data stored","Public","Internal","Confidential","Strictly Confidential"],
                     intermediates : ["university_confidential_data_controller"],
                     severity_intermediate_control : [
-                        {class_trigger: 0, severity : "No Data"},
-                        {class_trigger: 1, severity : "Public"},
-                        {class_trigger: 2, severity : "Internal"},
-                        {class_trigger: 3, severity : "Confidential"},
-                        {class_trigger: 4, severity : "Strictly Confidential"}
+                        {class_trigger: 0, severity : "No Data", colour : "grey"},
+                        {class_trigger: 1, severity : "Public", colour : "green"},
+                        {class_trigger: 2, severity : "Internal", colour : "orange"},
+                        {class_trigger: 3, severity : "Confidential", colour : "red"},
+                        {class_trigger: 4, severity : "Strictly Confidential", colour : "black"}
                     ]
                 },
                 {
@@ -455,8 +456,8 @@
                     severities : ["Yes","No"],
                     intermediates : ["personal_data_controller"],
                     severity_intermediate_control : [
-                        {bin_trigger : true, severity : "Yes - Possible GDPR Notification Required"},
-                        {bin_trigger : false, severity : "No"}
+                        {bin_trigger : false, severity : "No", colour : "grey"},
+                        {bin_trigger : true, severity : "Yes - Possible GDPR Notification Required", colour : "black"}
                     ]
                 },
                 {
@@ -466,11 +467,11 @@
                     severities : ["Category A / NCSC 6","Category B / NCSC 5","Category C / NCSC 4","Category D / NCSC 3"],
                     intermediates : ["place_dropped_controller"],
                     severity_intermediate_control : [
-                        {on_threshold : 0, severity : "N/A"},
-                        {on_threshold : 1, severity : "Category A / NCSC 6"},
-                        {on_threshold : 5, severity : "Category B / NCSC 5"},
-                        {on_threshold : 9, severity : "Category C / NCSC 4"},
-                        {on_threshold : 13, severity : "Category D / NCSC 3"}
+                        {on_threshold : 0, severity : "N/A", colour : "grey"},
+                        {on_threshold : 1, severity : "Category A / NCSC 6", colour : "green"},
+                        {on_threshold : 5, severity : "Category B / NCSC 5", colour : "orange"},
+                        {on_threshold : 9, severity : "Category C / NCSC 4", colour : "red"},
+                        {on_threshold : 13, severity : "Category D / NCSC 3", colour : "black"}
                     ]
                 }
             ]

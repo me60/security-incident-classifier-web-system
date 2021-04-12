@@ -1,6 +1,6 @@
 <template>
     <div id="counter_severity_group">
-        <b> {{ this.onscreen }} </b>
+        <b> <div v-bind:style="{ color : activeColor }"> {{ this.onscreen }} </div> </b>
     </div>
 </template>
 
@@ -11,7 +11,8 @@
         props: ["name", "severities", "severity_intermediate_control"],
         data() {
             return {
-                onscreen: "Severity will go here on activation!"
+                onscreen: "Severity will go here on activation!",
+                activeColor: "white"
             }
         },
         mounted() {
@@ -20,6 +21,7 @@
                     if (message == this.severity_intermediate_control[i].on_threshold) {
                         console.log(this.severity_intermediate_control[i].severity);
                         this.onscreen = this.severity_intermediate_control[i].severity;
+                        this.activeColor = this.severity_intermediate_control[i].colour;
                     }
                 }
             });

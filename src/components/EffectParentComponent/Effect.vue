@@ -9,26 +9,31 @@
           <div v-if="weight != null">
              <CounterEffect :weight="weight" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" :basic_trigger="basic_trigger" />
           </div>
+          <div v-if="contribution != null">
+             <CodeBlockEffect :contribution="contribution" :p_q_type="p_q_type" :p_q_name="p_q_name" :a_i="a_i" :name="name" :basic_trigger="basic_trigger" />
+          </div>
       </div>
 </template>
 
 <script>
     import IncrementEffect from './IncrementEffect.vue';
     import BinaryEffect from './BinaryEffect.vue';
-    import CounterEffect from './CounterEffect.vue'
+    import CounterEffect from './CounterEffect.vue';
+    import CodeBlockEffect from './CodeBlockEffect.vue';
     export default {
         name: "Effect",
         // a_i = affecting_intermediate, p_q_type = parent question type
         // p_q_name = parent question name
-        props: ["name", "a_i", "p_q_type", "p_q_name", "c_class", "state", "weight", "basic_trigger"],
+        props: ["name", "a_i", "p_q_type", "p_q_name", "c_class", "state", "weight", "contribution", "basic_trigger"],
         components: {
             IncrementEffect,
             BinaryEffect,
-            CounterEffect
+            CounterEffect,
+            CodeBlockEffect
         },
         methods: {
             debug : function () {
-                console.log("name: " + this.name + " a_i: " + this.a_i + " p_q_type: " + this.p_q_type + " c_class: " + this.c_class + " state: " + this.state + " weight: " + this.weight + " basic trigger: " + this.basic_trigger);
+                console.log("name: " + this.name + " a_i: " + this.a_i + " p_q_type: " + this.p_q_type + " c_class: " + this.c_class + " state: " + this.state + " weight: " + this.weight + " contribution: " + this.contribution + " basic trigger: " + this.basic_trigger);
             },
             getEmitEventName : function(activation) {
                 let actString = activation ? "activate" : "deactivate";
@@ -43,6 +48,9 @@
                 }
                 if (this.state != null) {
                     return this.p_q_name + "." + this.name + "." + this.state;
+                }
+                if (this.contribution != null) {
+                    return this.p_q_name + "." + this.name + "." + this.contribution;
                 }
             }
         }

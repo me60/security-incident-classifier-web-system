@@ -1,0 +1,28 @@
+GUIDE: 
+
+Tests will be documented with a code in form x+_y+_z+ where:
+
+x = effect groups interacting with y as o = onepick or m = multipick
+
+y = intermediate type as b = binary, c = counter, i = increment, or cb = codeblock
+
+z = severity group as e = exclusive or r = regressive
+
++ indicates one or more, i.e. you can have multiple different intermediates, effect groups, or severity groups
+
+Test o_b_e: Binary Intermediate Base 
+Test o_c_e: Counter Intermediate Base 
+Test o_i_e: Increment Intermediate Base 
+Test m_b_e: Multipick instead of Onepick against Binary Intermediate 
+Test m_c_e: Multipick instead of Onepick against Counter Intermediate 
+Test m_i_e: Multipick instead of Onepick against Increment Intermediate 
+Test o_o_b_e: Multiple Effect Groups against Binary Intermediate
+Test o_o_c_e: Multiple Effect Groups against Counter Intermediate
+Test o_o_i_e: Multiple Effect Groups against Increment Intermediate
+Test o_m_b_e: Mixed Effect Groups against Binary Intermediate
+Test o_m_c_e: Mixed Effect Groups against Counter Intermediate
+Test o_m_i_e: Mixed Effect Groups against Increment Intermediate
+Test o_o_o_m_i_b_c_e_e_e: Ant Infestation Classifier
+
+
+
