@@ -1,0 +1,408 @@
+Abstract
+~~~~~~~~
+
+The Information Technology Services group (ITS) at the University of St Andrews has been using an excel
+spreadsheet as the format through which ITS staff enter data surrounding security incidents - spreadsheet
+logic is then capable of classifying the incident into one of several categories amongst several different severity
+classification schemes, which can then be used to inform the entrant of the importance of the incident or who to
+involve in accordance with a severity guidance scheme. The problem with this approach, as well as others, is
+its static nature and single platform prominence. Changes made to application logic require mutating hidden,
+implicit, and undeclared logic statements, even if only a small change needs to be made. This paper concerns the
+creation of a piece of software that attempts to define its own, dynamic system for incident severity classification -
+hosted within a browser environment, the system presents components to a maintainer that facilitates the easy
+change of the form elements and ‘wiring’ between inputs made by an entrant, and the final severity rating. The
+system’s ‘MapWep’ design allows a maintainer to understand the sensible set of replaceable, mutable, logic objects
+and components that, when used in harmony, can represent a severity system capable of consistent evolution -
+the ’MapWeb’ design structure, as applied to the web system, will be used to demonstrate the system’s ability to
+emulate several real-life and fictional severity systems in tandem with the excel system used by ITS here at the
+University.
+
+User Manual/Build Instructions
+------------------------------
+
+Those that would interact with the system concern themselves with two different forms of input: primary (MWOM
+alteration), and secondary (incident entry to front-end). The 2 sections below will explain how the system is to be
+used by both the maintainers (primary input users) and event entrants (secondary input users).
+
+Primary Input User: System Maintainer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Within organisations that would adopt the system is some staff member that possesses a comprehensive knowledge
+of the security needs of the organisation, or manages a team of security professionals who each manage a security
+domain within the organisation - this staff member should assume the role of maintainer if they intend on utilising
+the web system, this role requires the manipulation of the MWOM as security classification needs change.
+Effect groups, intermediates, and severity groups may be registered in any order, however, correct registration of
+each is required for the deployment of the system in its intended state. Although not necessary, it is recommended
+practice to design a MapWeb diagram like the one illustrated in Figure 2. Below is a guide to be used by the
+maintainer of a classification system that explains the creation of each of the MapWeb components, as well as any
+quirks in their design.
+
+Firstly, the "classifier_name" field should contain the name of the classification field - this will be displayed
+in the header segment of the rendered web page. Intermediates, as mentioned in the slides of section 7.2, are
+a structure of computation that allows for a translation between multiple effects and a severity rating, the below
+guide indicates the purpose and stipulations surrounding the attributes that can be found in MWOM intermediate
+descriptions:
+
+• "name" : These should be a unique name that other components would reference if they wish to utilise the
+intermediate
+
+• "type" : This should be the strings "inc" (Increment), "bin" (Binary), or "count" (Counter) exclusively.
+Increments are intermediates who possess an active class that is the highest of the effects that signal it,
+this has applications like the "University Confidential Data" severity system from the University MWOM.
+Binaries are intermediates who will signal an end severity system with a false value if and only if there
+are no truth effects that signal the intermediate. Finally, counter intermediates possess thresholds and
+an internal counter variable - effects signal weights to the counter intermediate, upon which the internal
+counter updates by that weight (this weight is subtracted when the effect is deactivated), when the counter
+surpasses the thresholds listed, that threshold is communicated to the end severity system
+
+• "classes" : This should be a single number that indicates how many classes the intermediate is capable of
+representing - this attribute should only be included if the intermediate is of "inc" type.
+
+• "thresholds" : This should be a list of numbers that represent the thresholds of a counter intermediate -
+likewise with the "classes" attribute, this should only be included if the intermediate is of "count" type. A 0
+threshold must be included
+
+• "priority" : This is a deprecated feature that exists in current MWOMs - it should be included as "true"
+amongst each intermediate registered
+
+• "severity_system" : Mappings between intermediates and severity systems should be one-to-one, therefore
+this should be a string that contains the unique name of the severity system the intermediate signals with
+the appropriate, class, threshold, or binary
+
+• "intermediate_intermediate_control" : Intermediates themselves may signal other intermediates as if
+they were being signalled by an effect, within this list, an "affecting_intermediate" (the unique name of
+the intermediate to signal), "class_trigger" (iff the implementing intermediate is of increment type) or
+"bin_trigger" (iff the implementing intermediate is of binary type) or "on_threshold" (iff the implementing
+intermediate is of counter type) must be specified - these are the triggers that, when the internal state of
+the intermediate reaches the trigger points, triggers the intermediate-intermediate signal as specified by the
+"state", "weight", or "class" attributes which are to be written on the same line (if "affecting_intermediate" is
+of binary, counter, or increment type respectively). A zero option for classes and thresholds, and a true/false
+value for binary intermediates to be signalled must be included. To see an example of intermediate-
+intermediate signalling, see the intermediates from the University MWOM Classifier System. There may
+only be one intermediate-intermediate mapping per intermediate
+
+Effect groups are the MapWeb terminology of questions and their associated answers, who possess effects.
+Effects, once activated, signal intermediate components to update their internal structures, as mentioned, the
+aggregation and processing of data internal to intermediate components then determines what severity groups to
+signal, and thus, the severities themselves:
+
+• "question_text" : Effect group question texts should be unique, each question answer (effect) within this
+effect group must have a unique name relative to the effect group, however, effects of the same name may
+exist in different effect groups, i.e. the system uses a question text - effect name pairing as a key
+
+• "type" : May be the strings "onepick" or "multipick". Onepicks are built from radio buttons, on first activation
+of any effect/answer, will allow you to have only one effect from the effect group selected. Multipicks are
+built from check boxes and can be checked and unchecked as the user likes
+
+• "effects" : This is a list of strings that will represent the on-screen questions, must be unique relative to other
+effects in the same group
+
+• "intermediates" : The intermediates this effect group interacts with
+
+• "effect_intermediate_control" : A list of objects within which, the signalling intermediate is specified
+("affecting_intermediate"), which effect the signal pertains to ("effect" - must be an option from the effects
+list), the weight, class, or state it contributes to the intermediate when activated, and an optional attribute,
+"basic_trigger", which should contain a string message that displays in a dialogue box upon the effect’s
+activation. There should be an effect entry in this list for each of the effects listed in this effect group
+Severity groups are containers for different severities, of which, one can only be signalled at a time. These
+are the result of the secondary input user’s form entry - as effects signal intermediates, and those intermediates
+eventually signal severity groups, a severity is chosen based upon the signal from the intermediate that matches
+an entry in the "severity_intermediate_control":
+
+• "name" : The unique name of the severity group that other components will reference
+
+• "display_name" : The name of the severity group as it appears on screen to the secondary input user
+
+• "type" : The system only supports the "exclusive" severity group type at the moment - this just means that
+only one severity from the severity group may be active at any one time
+
+• "severities" : This should be a list of the severities (these face the same stipulations as "effects" in effect
+groups as far as uniquness is concerned)
+
+• "intermediates" : This should be a list of the one intermediate that signals this severity group
+
+• "severity_intermediate_control" : There must exist a severity "on_threshold", "class_trigger", or "bin_trigger"
+for each corresponding intermediate that signals that severity system - these are dependent on the intermediate
+type that signals the severity group (remember that there will only be one intermediate that signals a
+given severity group). There must exist a zero threshold, zero class, false and true trigger attributes for a
+severity system. Alongside this will be the "severity", which is the text that is displayed on-screen when the
+corresponding trigger is active, and an optional "colour" attribute for the corresponding severity text - this
+changes the colour of the font to a colour of the maintainers choosing, these may be exclusively from the
+colours that CSS allows
+
+It is worth noting the mapping that may take place when defining an MWOM: Effect groups may signal
+multiple different intermediates, intermediates may signal one other intermediate and one severity system.
+Severity systems may not signal other components. Any other configuration has not been tested and will result in
+undefined behaviour - there is further work to be done in determining the system’s response to MWOMs that
+possess mappings that are any different from those recommended. It is also worth noting that the location of
+the intended active MWOM should be loaded into the data method of the App.vue component, spare, outdated,
+theoretical or otherwise unused MWOM examples should be kept in the "src/MWOMs" directory. It is also
+recommended good practice to version control the repository to maintain changes made to active and unused
+MWOMs alike.
+
+Secondary Input User: Incident Entrant/Analyst/ITS Staff
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Unlike the system maintainer, who is responsible for the management of the MWOM of the system and should
+have a good understanding of the security domain of the system that requires the classifier, secondary input users
+or incident entrants are simply responsible for logging the details of the event using the front end that the classifier
+web system presents to them. It it the entrants responsibility to accurately enter data surrounding the incident -
+of course, the ability to do this is limited by the content of the form, which is determined by the MWOM - and
+communicate the severity classification(s) of the event as printed at the bottom of the SPA to the relevant staff, or
+enter it into the relevant external system. Once an incident has been classified with the system, if the entrant
+wishes to blank out the result or start afresh they may refresh the page (usually done with a browser button or f5
+command).
+
+Deployment Instructions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Prerequisites: NPM and a properly configured nginx server. At the moment, the system can be deployed for
+testing or used in production in two different ways. To build and test the MWOM as a maintainer, deploying
+for testing is advised before releasing onto a production server - this can be done by navigating to the top
+level directory of the project and executing the command "npm run serve" - this presents an IP-port pairing
+(localhost:8080 by default) to the CLI, which the maintainer can access via the browser - this will be immediately
+reactive to changes made to the MWOM or code. To deploy in production, cancel the "npm run serve" process and
+build using the command "npm run build" - this produces content in the newly formed, or edited, "dist" directory
+within the top level directory of the project - the contents, once copied into the "nginx_defa
+
+
+Motivation
+~~~~~~~~~~
+
+For large organisations possessing complex computer systems (networked file systems, Email servers, multiple
+interlinked DBMS, etc.) that often exist as a part of computer networks such as that of the University of St Andrews,
+there is a need to classify the severity of security events. Security events can vary in type, vector, system(s)
+or people affected, but most importantly vary in their severity. Severity as a concept is entirely relative to the
+incident that requires classification, but most usually refers to the incident’s ability to affect the confidentiality,
+availability, and integrity of information assets that belong to the organisation. Information assets, in this context,
+can refer to the qualities or information that an individual possesses, as such, the jeopardization of personal data
+such as medical records or passwords. Organisations possess the need, via taxonomies, academic classing systems,
+governmental advice, or otherwise, to classify the events as they occur. Security-assigned personnel can use the
+classing of an event’s severity to determine: the personnel required to deal with the incident, the time taken
+for the incident to be resolved, and the resources required to solve the incident, among other domain-specific
+organisational needs.
+
+Although organisations can be driven in their motive to build severity classing schemes from aforementioned
+sources such as government and academia, threat landscapes that dictate formalised classing schemes and security
+taxonomies that guide the creation of organisation-specific security classification systems are highly subject to
+change, for instance:
+
+• New technologies might be adopted - as of 2021, Bitcoin and other cryptocurrencies represent a new
+form of information asset which can be business critical, as organisations seek to adopt technologies like
+this, their security classification schemes must accurately reflect the security risk they pose
+
+• Old technologies might change - whether at the whim of society’s opinion of significance surrounding
+these technologies, or bound by inevitable obsolescence, the risk some technologies pose to organisations
+can degrade over time, as such, the security classifications surrounding their risk may change - the system
+used to determine this must change with it
+
+• The system requires tailoring - Perhaps as the result of newly incorporated governmental or academic
+advice, it is revealed that the organisation’s security needs are misaligned. As such, fine tuning of the
+organisation’s incident classification system could be required
+
+The dynamism this provokes amongst incident classifiers presents a challenge to organisations for several reasons
+when the human elements of the maintenance of these kinds of systems is considered. The technology chosen to
+build and use the system can become obsolete, difficult to understand, or generally ill-fitting for new operational
+needs. Builders of the system or new personnel may find the logic difficult to understand if the system hasn’t
+been revisited in a while, requiring a form of reverse engineering to take place - this process could be invoked if
+even a small change to severity classing need be made.
+
+The security incident classifier system proposed seeks to resolve the operational issues mentioned. It does this
+by not only presenting a series of objects capable of representing severity systems referred to as the ’MapWeb’
+model that may be implemented by any system, but also a web system that in of itself, implements the model in a
+fashion that allows a maintainer to make alterations hassle-free. The implementation is a web system that allows
+for a maintainer of the system (who likely belongs to the cyber security department of the organisation, and has a
+comprehensive understanding of the organisation’s security needs) to create, and more importantly, easily adjust
+the mechanics of the classification system. The system proposed allows this maintainer to define questions and
+answers (effect groups), severity classes (severity groups), and the logic of the form (intermediates) in a way that
+is sensible and easy to understand, should the maintainer, or any future maintainers, have to revisit the form as a
+result of a change in operational security requirements.
+
+Design
+------
+
+MapWeb
+~~~~~~
+
+The initial design of the program as it pertained to the single, static University of St Andrews incident classifier,
+would have been a system that could have relied on the same kind of logic used in the Excel spreadsheet that
+currently stores that system. However, to account for dynamism and achieve the other goals of the system as per
+the requirements specified in section 6.1, a design was required that took dynamism into account, and would
+be capable of representing any kind of classification system. Firstly, the idea of effect groups was considered -
+effect groups are merely questions for which the answers have effects on a final severity, i.e. "Was personal data
+jeopardised as a result of the security incident?", these effects are used as signals to other components of the design,
+more specifically, intermediates.
+
+Intermediates are the representation of intermediate logic that exists between question answers, effects, and
+final severities. As a system that should be able to build any classification system ’on top of it’, the enumerated list
+of intermediate types available in the system should be capable of at least representing the University’s current
+system, however, there is always scope to add more intermediate types (see further work in section 8.3.1 for the
+idea of intermediate ’completeness’). Already mentioned is the idea of the ’MapWeb’ abstract data type. In section
+6.1 and 6.2 the motivations of the software were discussed as being easily mutable and dynamism-tolerant, a
+data type that can account for simple changes as well as be used for many potential classification systems was
+required - the below 2 visualisations reveal firstly, how the MapWeb structure combines the ideas of effect groups,
+intermediates, and severities together, and secondly, how a severity system can be actually be built with the
+MapWeb as a design tool.
+
+Choice of Technology
+~~~~~~~~~~~~~~~~~~~~
+
+It was decided early on in the project’s development that a web UI would be chosen for this project as opposed
+to one produced for the desktop. Browser enviroments are commonly available and intuitive to use - there
+are also a lot of pre-existing UI elements such as radio buttons and check boxes available freely, saving on the
+development of these interactive components. When formulating the concept of the system - separated ’MapWeb’
+components of parts: effect groups, intermediates, and severity groups, a choice of technology that allowed an
+all-in-one solution for styling and behaviour (scripting) amongst the components was desired, it was also desired
+to have components in the system occupy a class-like hierarchy where components registered in one component
+may access its variables and methods with relative ease. Vue.js is a Javascript-built front-end framework that
+allowed for exactly that - components built using Vue possess templates (HTML allowing for dynamic component
+registration), scripts (areas for native Vue code that can interact with child and parent components as well as
+vanilla Javascript), and styles in all-in-one Vue components. On top of this, it is a modern, supported, open-source
+framework with efficiency in mind due to its usage of virtual DOM technology.
+
+Implementation
+~~~~~~~~~~~~~~
+
+The idea of the MapWeb had already been fully formulated before a line of code for the new system was written,
+so translating its ideas into code required some forethought. Some of the major hurdles considered when thinking
+about the implementation of the software were signalling mechanisms, i.e. "activation" of an effect should reflect
+in a mapped intermediate component, which may or may not have a severity output. There was also the issue that
+the developer was constrained by the chosen technology, and that whatever approach considered had to agree with
+this constraint. In addition to this, there was also the issue surrounding translating the idea of the MapWeb into
+code so that components could inherit the relevant data and auto-configure signalling, on-screen representation
+and logic (mostly present with the idea of intermediates). This section details the major implementation decisions
+made over the course of the final software’s development, explaining the reasoning for the problems discussed
+here.
+
+MapWeb Object Model (MWOM)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To begin with, it was recognised that the MapWeb diagrams the developer was using to visualise MapWeb
+structures for a specific classification system had to have some kind of programmatic format or alternative capable
+of being accepted by a program and rendered logically, as well as on-screen. Each Vue.js component may possess a
+data method, within which, static data to be used by the program is usually initially stored, however, data within
+this method can also be mutated by Vuie.js code with the "this" operator. Data in the data() method follows a
+JSON-like syntax, which first prompted the developer to consider a JSON-like description of the MapWeb to be
+entered into the data method - this was the birth of the MWOM, or MapWeb Object Model.
+
+Data in the MWOM format would be capable of representing the three primary parts of the MapWeb structure
+as object lists: "effect_groups", "severity_groups", and "all_intermediates". Within each of these lists, the MWOM
+documentation could guide a maintainer into creating a severity system whose details involving weights, classes,
+question text, etc. are represented as attributes that belong to the objects inside these lists. The rest of the
+program could then interpret the MWOM and build out the logic and visual components to register on-screen.
+
+Components and Data Flow (Signalling and Auto-configuration)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Next, the actual components themselves had to be considered. Vue.js, as mentioned in the "Choice of Technology"
+section, possesses components identified with the ".vue" file extension - these components can be seen as atomic
+units to the SPA, and are capable of each representing their own templates (HTML), behaviour (script tag), and
+aesthetics (style tag with CSS). Components are registered in the program via the templates of each component,
+with the "App.vue" acting as the root component to all others (as components are registered from a "parent" as
+"child" components to that "parent", a tree structure can be visualised). Data can be passed into these components
+with a Vue mechanism known as props - the component can access these variables by value like method parameters,
+which they may compute with or pass down to other child components. This would be the primary mechanism
+used to build out the form, passing down data to components that could represent intermediates, effect groups
+and severity groups.
+
+The other issue raised surrounded that of signalling/inter-component communication. With the idea of props as
+the only way the system passed data, a different solution had to be considered when thinking about the passing
+of data between components that are not relatives, tree-wise. Vue implements "emits", which are mechanisms
+for passing data up the tree component model, however, to implement this for components on the complete
+other side of the tree would be an issue as it would require a lot of duplicated handler code, instead, a generic
+Javascript mechanism known as the "EventBus" as used - this is a program that, once imported, allowed component-
+component interaction regardless of the tree structure involved, components simply signal data on the EventBus
+with a string identifier and a payload. Components could attain unique identifiers on registration from the MWOM
+(names are usually used - for more information on this see the user guide in the appendices chapter) and include
+those as target destinations for signals, like, for instance, an effect signalling an intermediate component via its
+"name" field, with the effect contribution as the payload.
+
+Effect Groups
+~~~~~~~~~~~~~
+
+Effect groups are represented on-screen as questions, underneath which each of the question’s answers are printed
+either as radio buttons from which only one may be selected at any one time ("onepick"), or check boxes from
+which any can be chosen ("multipick"). On clicking any of these, methods in the relevant effect group code are
+invoked to signal the registered intermediate for that effect. Effects are split, component-wise, by the intermediate
+type they signal, at the moment, this results in a small amount of duplicated code - this could be improved by
+simply having one effect type for all effects, however, at the time of implementation of this auto-registration, it
+was thought that different types of effects would possess more type-specific behaviour. It is worth noting that the
+omission of fields such as "weight" and "class" is used as a mechanism to discern which intermediate the effect
+signals - it is also worth noting that to gather shared functionality amongst effects (as well as in other parts of the
+software), parent methods are called using "this.$parent", for instance, signalling intermediate components is
+done in this fashion as all effect types share the same need to signal intermediates.
+
+Intermediates
+~~~~~~~~~~~~~
+	
+Intermediates are registered via the same "omission of certain fields" approach that registers the effect components,
+however, differently typed intermediate objects do possess divergent behaviour, justifying their separation as
+components. Firstly, all intermediates consider effects that signal them as "affectors", or, in-code, as members
+of the list "affectorsActive", which initialises as empty - this list stores the unique identifier for the effect that
+signals the intermediate. Manager methods within each intermediate component take signals received from
+effects (that target the intermediate via their unique name) and add their question text-effect name pairings to the
+"affectorsActive" list - data associated with the effect is added in the EventBus as a payload, the component then
+adds this to a contribution list where the index is the same as that of the "affector" that signalled the intermediate.
+It is at this point, when intermediates are signalled, that they make the necessary checks to see if their severity
+group need be signalled. Counter intermediates will signal an end severity when a new threshold is reached,
+increment intermediates do the same with classes, and binary intermediates signal a change either when a
+truth signal is first noticed, or all truth signals have been deactivated. The deactivation process interacts with
+intermediates in the same way as with activation, however, a different handler method is invoked, one that will
+remove the payload and identifier from the associated lists.
+
+Severity Groups
+~~~~~~~~~~~~~~~
+
+Severity groups are the simplest form of component in the program, however, do suffer from the same code
+duplication issue present in effect groups due to shared functionality being stored amongst separate components.
+Severity groups receive signals from intermediates to change their severities from one to another in an exclusive
+fashion - inclusive severity groups were considered early on in the development process, but there was never a
+need to implement them with the scope of the program in mind. Severity group components simply search for
+the severity string associated with the signal handed to them by their registered intermediate, and display it
+on-screen.
+
+Guidance
+~~~~~~~~
+
+As the maintainer mutates the MWOM for their organisation, logical inconsistencies that would result in undefined
+behaviour are best well documented as opposed to ignored. As difficulty in recognising previously written severity
+logic was a part of the motivation for the creation of this software, it is important that the maintainer have access
+to a systematic guidance document that explains the purpose of each MWOM type. Earlier in the year, it was
+planned to have a "Validation" component that would diagnose issues in the MWOM, however, there was not
+enough time to properly implement this. For a more verbose view of signalling and internal state, the console of
+the browser window can be inspected. The aforementioned maintainer guidance documentation can be found in
+the appendix chapter in section 9.4.1.
+
+Testing Summary
+~~~~~~~~~~~~~~~
+
+The primary testing goal of the system is to ensure that the ’MapWeb’ Object Model (MWOM) insertion by the
+maintainer corresponds to the classifier system they had in mind when it was designed. As the primary input - the
+MWOM - auto-builds the questions, answers, intermediates, and severity systems (the ’wiring’) of the classifier,
+the secondary input - the answers selected by a security team member who requires the security classification of
+an event - will determine if the classifier system deployed with the MWOM does as it should. In order to test the
+system, several testing MWOMs were deployed as primary inputs to the system with expected outputs in mind,
+the actual outputs (as generated by secondary form input) can then be checked against the expected outputs to
+determine if the MWOM was an actual representation of the system that was aimed to be built by the maintainer.
+Firstly, the testing criteria must be devised, i.e. which components of the MWOM will be examined singularly,
+and then in tandem, to properly test the dynamism the system allows. As discussed in the design, the MWOM is
+split into three arrays: "all_intermediates", "effect_groups", and "severity_groups". Each component (and their
+types) will be examined separately to begin with (this can be considered as a kind of unit test) in a test MWOM
+with expected and actual results documented alongside - then, an MWOM will be devised that makes use of
+different components and their types in order to determine if functionality exists as expected. Each MWOM can
+be found in the src/MWOMs/testing_mwoms directory.
+
+Testing Shorthand
+~~~~~~~~~~~~~~~~~
+
+Due to the diversity of the testing examples deployed against the system, a shorthand has been devised to allow
+for the testing examples to be examined at face value in a short number of characters, and to see, at a glance,
+how they differ from one another:
+
+Tests will be documented with a code in form x+_y+_z+ where:
+x = effect groups interacting with y as o = onepick or m = multipick
+y = intermediate type as b = binary, c = counter, i = increment, or cb = codeblock
+z = severity group as e = exclusive or r = regressive
++ indicates one or more, i.e. you can have multiple different intermediates, effect groups, or severity groups
+
+[for testing proof screenshots, see the "Testing Screenshots" directory under this one]
