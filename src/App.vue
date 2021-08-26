@@ -27,110 +27,158 @@
     },
     data() {
         return {
-            classifier_name : "Ant Infestation Classifier",
+            classifier_name : "Nutrition of Calvin Calculator",
             all_intermediates : [
                 {
-                    name : "general_severity_controller",
-                    type : "inc",
-                    classes : 3,
-                    priority : true,
-                    severity_system: "general_severity"
-                },
-                {
-                    name : "ant_colour_controller",
-                    type : "bin",
-                    priority : true,
-                    severity_system: "ant_type_severity"
-                },
-                {
-                    name : "place_dropped_controller",
+                    name : "calories_controller",
                     type : "count",
-                    // Thresholds should always have a 0
-                    thresholds : [0,1,2,3],
+                    thresholds : [0,1500,2500],
                     priority : true,
-                    severity_system: "rooms_severity"
-                }
+                    severity_system : "calories_reflector_severity"
+                },
+                {
+                    name : "protein_controller",
+                    type : "count",
+                    thresholds : [0,52,60],
+                    priority : true,
+                    severity_system : "protein_reflector_severity"
+                },
+                {
+                    name : "carbs_controller",
+                    type : "count",
+                    thresholds : [0,225,325],
+                    priority : true,
+                    severity_system : "carbs_reflector_severity"
+                },
+                {
+                    // accidental thomas the tank engine reference...
+                    name : "fat_controller",
+                    type : "count",
+                    thresholds : [0,44,77],
+                    priority : true,
+                    severity_system : "fat_reflector_severity"
+                },
             ],
-            effect_groups : [{
-                    question_text : "How much bread was dropped?",
+            effect_groups : [
+                {
+                    question_text : "Breakfast",
                     type : "onepick",
-                    effects : ["Crumbs","Bits","Slice","Loaf"],
-                    intermediates : ["general_severity_controller"],
+                    effects : ["Breakfast Wrap", "Coconut-almond Oatmeal", "Eggs and Toast"],
+                    intermediates : ["calories_controller", "protein_controller", "carbs_controller", "fat__controller"],
+                    // at the moment, the relationship between effect groups
+                    // and intermediates is one-to-many, however, here is a
+                    // prime example of individual effects hosting multiple,
+                    // separate intermediates, i.e. a one-to-many relationship
+                    // between *effects* and intermediates, not just effect
+                    // groups (which is a more conceptual relationship as it
+                    // stands, and is a benefit of the architecture instead of
+                    // an implementation detail)
+                    // ..
+                    // I need to investigate how effects are rendered, and
+                    // change that to accommodate this
                     effect_intermediate_control : [
-                        {affecting_intermediate : "general_severity_controller", effect : "Crumbs", class : 1},
-                        {affecting_intermediate : "general_severity_controller", effect : "Bits", class : 1},
-                        {affecting_intermediate : "general_severity_controller", effect : "Slice", class : 2},
-                        {affecting_intermediate : "general_severity_controller", effect : "Loaf", class : 2}
+                        {affecting_intermediate : "calories_reflector_severity", effect : "Breakfast Wrap", weight : 601},
+                        {affecting_intermediate : "protein_reflector_severity", effect : "Breakfast Wrap", weight : 33},
+                        {affecting_intermediate : "carbs_reflector_severity", effect : "Breakfast Wrap", weight : 70},
+                        {affecting_intermediate : "fat_reflector_severity", effect : "Breakfast Wrap", weight : 22},
+                        {affecting_intermediate : "calories_reflector_severity", effect : "Coconut-almond Oatmeal", weight : 651},
+                        {affecting_intermediate : "protein_reflector_severity", effect : "Coconut-almond Oatmeal", weight : 32},
+                        {affecting_intermediate : "carbs_reflector_severity", effect : "Coconut-almond Oatmeal", weight : 77},
+                        {affecting_intermediate : "fat_reflector_severity", effect : "Coconut-almond Oatmeal", weight : 23},
+                        {affecting_intermediate : "calories_reflector_severity", effect : "Eggs and Toast", weight : 567},
+                        {affecting_intermediate : "protein_reflector_severity", effect : "Eggs and Toast", weight : 38},
+                        {affecting_intermediate : "carbs_reflector_severity", effect : "Eggs and Toast", weight : 60},
+                        {affecting_intermediate : "fat_reflector_severity", effect : "Eggs and Toast", weight : 20},
                     ]
                 },
                 {
-                    question_text : "What was on the bread?",
+                    question_text : "Lunch",
                     type : "onepick",
-                    effects : ["Nothing","Butter","Jam"],
-                    intermediates : ["general_severity_controller"],
+                    effects : ["Turkey Avocado Wrap", "Salmon Bowl", "Chicken Quinoa Bowl"],
+                    intermediates : ["calories_controller", "protein_controller", "carbs_controller", "fat__controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "general_severity_controller", effect : "Nothing", class : 1},
-                        {affecting_intermediate : "general_severity_controller", effect : "Butter", class : 2},
-                        {affecting_intermediate : "general_severity_controller", effect : "Jam", class : 3}
+                        {affecting_intermediate : "calories_controller", effect : "Turkey Avocado Wrap", weight : 648},
+                        {affecting_intermediate : "protein_controller", effect : "Turkey Avocado Wrap", weight : 43},
+                        {affecting_intermediate : "carbs_controller", effect : "Turkey Avocado Wrap", weight : 67},
+                        {affecting_intermediate : "fat_controller", effect : "Turkey Avocado Wrap", weight : 25},
+                        {affecting_intermediate : "calories_controller", effect : "Salmon Bowl", weight : 679},
+                        {affecting_intermediate : "protein_controller", effect : "Salmon Bowl", weight : 44},
+                        {affecting_intermediate : "carbs_controller", effect : "Salmon Bowl", weight : 70},
+                        {affecting_intermediate : "fat_controller", effect : "Salmon Bowl", weight : 27},
+                        {affecting_intermediate : "calories_controller", effect : "Chicken Quinoa Bowl", weight : 738},
+                        {affecting_intermediate : "protein_controller", effect : "Chicken Quinoa Bowl", weight : 50},
+                        {affecting_intermediate : "carbs_controller", effect : "Chicken Quinoa Bowl", weight : 77},
+                        {affecting_intermediate : "fat_controller", effect : "Chicken Quinoa Bowl", weight : 28},
                     ]
                 },
                 {
-                    question_text : "Are the ants red?",
+                    question_text : "Dinner",
                     type : "onepick",
-                    effects : ["Yes","No"],
-                    intermediates : ["ant_colour_controller"],
+                    effects : ["Shrimp Stir Fry", "Steak and Potato wit Side Salad", "Chicken and Bean Bowl"],
+                    intermediates : ["calories_controller", "protein_controller", "carbs_controller", "fat__controller"],
                     effect_intermediate_control : [
-                        {affecting_intermediate : "ant_colour_controller", effect : "Yes", state : true},
-                        {affecting_intermediate : "ant_colour_controller", effect : "No", state : false}
-                    ]
-                },
-                {
-                    question_text : "Where was the bread dropped?",
-                    type : "multipick",
-                    effects : ["Kitchen","Bathroom","Bedroom"],
-                    intermediates : ["place_dropped_controller"],
-                    effect_intermediate_control : [
-                        {affecting_intermediate : "place_dropped_controller", effect : "Kitchen", weight : 1},
-                        {affecting_intermediate : "place_dropped_controller", effect : "Bathroom", weight : 1},
-                        {affecting_intermediate : "place_dropped_controller", effect : "Bedroom", weight : 1}
+                        {affecting_intermediate : "calories_controller", effect : "Shrimp Stir Fry", weight : 678},
+                        {affecting_intermediate : "protein_controller", effect : "Shrimp Stir Fry", weight : 43},
+                        {affecting_intermediate : "carbs_controller", effect : "Shrimp Stir Fry", weight : 79},
+                        {affecting_intermediate : "fat__controller", effect : "Shrimp Stir Fry", weight : 24},
+                        {affecting_intermediate : "calories_controller", effect : "Steak and Potato wit Side Salad", weight : 677},
+                        {affecting_intermediate : "protein_controller", effect : "Steak and Potato wit Side Salad", weight : 49},
+                        {affecting_intermediate : "carbs_controller", effect : "Steak and Potato wit Side Salad", weight : 76},
+                        {affecting_intermediate : "fat_controller", effect : "Steak and Potato wit Side Salad", weight : 24},
+                        {affecting_intermediate : "calories_controller", effect : "Chicken and Bean Bowl", weight : 784},
+                        {affecting_intermediate : "protein_controller", effect : "Chicken and Bean Bowl", weight : 50},
+                        {affecting_intermediate : "carbs_controller", effect : "Chicken and Bean Bowl", weight : 81},
+                        {affecting_intermediate : "fat_controller", effect : "Chicken and Bean Bowl", weight : 30},
                     ]
                 }
             ],
             severity_groups : [
                 {
-                    name : "general_severity",
-                    display_name : "General Severity",
-                    type : "exclusive",
-                    severities : ["Not Severe","Pretty Bad","Infestation Likely"],
-                    intermediates : ["general_severity_controller"],
+                    name : "calories_reflector_severity",
+                    display_name : "Calories (KCal)",
+                    type : "reflective",
+                    severities : ["Below Target", "Within Target", "Above Target"],
+                    intermediates : ["calories_controller"],
                     severity_intermediate_control : [
-                        {class_trigger: 1, severity : "Not Severe"},
-                        {class_trigger: 2, severity : "Pretty Bad", colour : "yellow"},
-                        {class_trigger: 3, severity : "Infestation Likely", colour : "black"}
+                        {on_threshold : 0, severity : "Below Target"},
+                        {on_threshold : 1500, severity : "Within Target"},
+                        {on_threshold : 2500, severity : "Above Target"},
                     ]
                 },
                 {
-                    name : "ant_type_severity",
-                    display_name : "Ant Type",
-                    type : "exclusive",
-                    severities : ["Normal Ants","Fire Ants!"],
-                    intermediates : ["ant_colour_controller"],
+                    name : "protein_reflector_severity",
+                    display_name : "Protein (g)",
+                    type : "reflective",
+                    severities : ["Below Target", "Within Target", "Above Target"],
+                    intermediates : ["protein_controller"],
                     severity_intermediate_control : [
-                        {bin_trigger : true, severity : "Fire Ants!", colour : "red"},
-                        {bin_trigger : false, severity : "Normal Ants"}
+                        {on_threshold : 0, severity : "Below Target"},
+                        {on_threshold : 52, severity : "Within Target"},
+                        {on_threshold : 60, severity : "Above Target"},
                     ]
                 },
                 {
-                    name : "rooms_severity",
-                    display_name : "Rooms Involved",
-                    type : "exclusive",
-                    severities : ["1 Room Affected","2 Rooms Affected","3 Rooms Affected"],
-                    intermediates : ["place_dropped_controller"],
+                    name : "carbs_reflector_severity",
+                    display_name : "Carbs (g)",
+                    type : "reflective",
+                    severities : ["Below Target", "Within Target", "Above Target"],
+                    intermediates : ["carbs_controller"],
                     severity_intermediate_control : [
-                        {on_threshold : 0, severity : "No Rooms Affected"},
-                        {on_threshold : 1, severity : "1 Room Affected"},
-                        {on_threshold : 2, severity : "2 Rooms Affected"},
-                        {on_threshold : 3, severity : "3 Rooms Affected"}
+                        {on_threshold : 0, severity : "Below Target"},
+                        {on_threshold : 225, severity : "Within Target"},
+                        {on_threshold : 325, severity : "Above Target"},
+                    ]
+                },
+                {
+                    name : "fat_reflector_severity",
+                    display_name : "Fat (g)",
+                    type : "reflective",
+                    severities : ["Below Target", "Within Target", "Above Target"],
+                    intermediates : ["fat_controller"],
+                    severity_intermediate_control : [
+                        {on_threshold : 0, severity : "Below Target"},
+                        {on_threshold : 44, severity : "Within Target"},
+                        {on_threshold : 77, severity : "Above Target"},
                     ]
                 }
             ]

@@ -14,6 +14,19 @@
                     class/state/weight effect can be gathered -->
                     <div v-if="effect_intermediate.effect === effect">
 
+                        <!-- If we've encountered the effect before, add
+                        the a_i to the list via an EventBus -->
+                        
+                        <!--  TODO : CHECK NAMES TO MAKE SURE CORRECT  -->
+                        <div>
+                            <div v-if="this.checkEncounteredEffects(effect) == true">
+                                {{ this.addAdditionalIntermediateEffect() }}
+                            </div>
+                            <div v-else>
+                                {{ this.addEncounteredEffect(effect, effect.affecting_intermediate) }}
+                            </div>
+                        </div>
+
                         <!-- Find what kind of intermediate the effect
                         signals-->
                         <div v-for="intermediate in all_intermediates" :key="intermediate.name">
@@ -41,11 +54,33 @@
 
 <script>
     import Effect from './Effect.vue'
+    import EventBus from '../../event-bus.js';
     export default {
         name: "EffectGroup",
         props: ["effect_group", "all_intermediates"],
         components: {
             Effect
+        },
+        data() {
+            encountered_effects : []
+        },
+        methods {
+            checkEncounteredEffects : function(effect) {
+                for (let i = 0; i < this.encountered_effects.length; i++) {
+                    if (this.encountered_effects[i] == effect) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            addEncounteredEffect : function(effect) {
+                console.log("We've encountered this effect name before, add the additional effect");
+                this.encountered_effects.add(effect);
+            },
+            addAdditionalIntermediateEffect : function(effect, intermediate_name) {
+                console.log("Adding affecting intermediate " + intermediate_name + " to effect: " + effect);
+                EventBus.$emit(effect + ".new_a_i", intermediate_name);
+            }
         }
     }
 </script>

@@ -12,6 +12,11 @@
             Button
         },
         methods: {
+
+            // TODO: have getEmitEventName be getEmitEventName*s*, then emit
+            // each with a loop. We should not need to change the code in
+            // /../IntermediateParentComponent
+
             activate : function() {
                 console.log(this.p_q_name + "." + this.name + " detected as active!");
                 EventBus.$emit(this.$parent.getEmitEventName(true), this.$parent.getPayload());
